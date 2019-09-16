@@ -2,7 +2,7 @@ package uk.gov.companieshouse.reader;
 
 import java.util.Collection;
 
-import uk.gov.companieshouse.model.FilingReceived;
+import uk.gov.companieshouse.filing.FilingReceived;
 
 public interface FilingReader {
 

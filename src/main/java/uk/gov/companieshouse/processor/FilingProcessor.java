@@ -1,7 +1,7 @@
 package uk.gov.companieshouse.processor;
 
-import uk.gov.companieshouse.model.FilingProcessed;
-import uk.gov.companieshouse.model.FilingReceived;
+import uk.gov.companieshouse.filing.FilingProcessed;
+import uk.gov.companieshouse.filing.FilingReceived;
 
 @FunctionalInterface
 public interface FilingProcessor {

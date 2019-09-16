@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.writer;
 
-import uk.gov.companieshouse.model.FilingProcessed;
+import uk.gov.companieshouse.filing.FilingProcessed;
 
 @FunctionalInterface
 public interface FilingWriter {
