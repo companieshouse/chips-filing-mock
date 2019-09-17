@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.writer;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,8 +38,11 @@ public class FilingWriterImpl implements FilingWriter {
         config.setRoundRobinPartitioner(false);
 
         producer = new CHKafkaProducer(config);
-
-        // TODO: close the producer?
+    }
+    
+    @PreDestroy
+    public void close() {
+        producer.close();
     }
 
     @Override

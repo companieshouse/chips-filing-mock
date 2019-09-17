@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,7 +46,11 @@ public class FilingReaderImpl implements FilingReader {
 
         consumer = new CHKafkaConsumerGroup(config);
         consumer.connect();
-        // TODO: close the consumer?
+    }
+    
+    @PreDestroy
+    public void close() {
+        consumer.close();
     }
 
     @Override
