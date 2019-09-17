@@ -7,12 +7,15 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.kafka.consumer.CHKafkaConsumerGroup;
 import uk.gov.companieshouse.kafka.consumer.ConsumerConfig;
+import uk.gov.companieshouse.kafka.deserialization.DeserializerFactory;
+import uk.gov.companieshouse.kafka.exceptions.DeserializationException;
 import uk.gov.companieshouse.kafka.message.Message;
 
 @Component
@@ -28,6 +31,9 @@ public class FilingReaderImpl implements FilingReader {
     private String applicationName;
     
     private CHKafkaConsumerGroup consumer;
+    
+    @Autowired
+    private DeserializerFactory deserializerFactory;
 
     @PostConstruct
     public void init() {
@@ -46,15 +52,17 @@ public class FilingReaderImpl implements FilingReader {
     public Collection<FilingReceived> read() {
         List<FilingReceived> receivedList = new ArrayList<>();
         for (Message msg : consumer.consume()) {
-            receivedList.add(deserialise(msg));
+            try {
+                receivedList.add(deserialise(msg));
+            } catch (Exception e) {
+                // TODO Log error
+                e.printStackTrace();
+            }
         }
         return receivedList;
     }
     
-    private FilingReceived deserialise(Message msg) {
-        //TODO implement
-        FilingReceived r = new FilingReceived();
-        r.setApplicationId(new String(msg.getValue()));
-        return r;
+    private FilingReceived deserialise(Message msg) throws DeserializationException {
+        return deserializerFactory.getSpecificRecordDeserializer(FilingReceived.class).fromBinary(msg, FilingReceived.getClassSchema());
     }
 }
