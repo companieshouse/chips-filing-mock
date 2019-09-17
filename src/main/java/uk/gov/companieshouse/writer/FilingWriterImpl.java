@@ -5,7 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import uk.gov.companieshouse.filing.FilingProcessed;
+import uk.gov.companieshouse.filing.processed.FilingProcessed;
 import uk.gov.companieshouse.kafka.message.Message;
 import uk.gov.companieshouse.kafka.producer.Acks;
 import uk.gov.companieshouse.kafka.producer.CHKafkaProducer;

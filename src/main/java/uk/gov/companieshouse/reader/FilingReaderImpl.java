@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import uk.gov.companieshouse.filing.FilingReceived;
+import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.kafka.consumer.CHKafkaConsumerGroup;
 import uk.gov.companieshouse.kafka.consumer.ConsumerConfig;
 import uk.gov.companieshouse.kafka.message.Message;

@@ -2,8 +2,8 @@ package uk.gov.companieshouse.processor;
 
 import org.springframework.stereotype.Component;
 
-import uk.gov.companieshouse.filing.FilingProcessed;
-import uk.gov.companieshouse.filing.FilingReceived;
+import uk.gov.companieshouse.filing.processed.FilingProcessed;
+import uk.gov.companieshouse.filing.received.FilingReceived;
 
 @Component
 public class FilingProcessorImpl implements FilingProcessor {
