@@ -23,7 +23,7 @@
 
         <!-- Dependency Versions -->
         <ch-kafka.version>1.4.2</ch-kafka.version>
-        <kafka-models.version>1.0.8</kafka-models.version>
+        <kafka-models.version>1.0.9</kafka-models.version>
     </properties>
 
     <dependencies>
