@@ -2,14 +2,17 @@ package uk.gov.companieshouse.writer;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import uk.gov.companieshouse.filing.processed.FilingProcessed;
+import uk.gov.companieshouse.kafka.exceptions.SerializationException;
 import uk.gov.companieshouse.kafka.message.Message;
 import uk.gov.companieshouse.kafka.producer.Acks;
 import uk.gov.companieshouse.kafka.producer.CHKafkaProducer;
 import uk.gov.companieshouse.kafka.producer.ProducerConfig;
+import uk.gov.companieshouse.kafka.serialization.SerializerFactory;
 
 @Component
 public class FilingWriterImpl implements FilingWriter {
@@ -21,6 +24,9 @@ public class FilingWriterImpl implements FilingWriter {
     private String topicName;
     
     private CHKafkaProducer producer;
+    
+    @Autowired
+    private SerializerFactory serializerFactory;
 
     @PostConstruct
     public void init() {
@@ -37,8 +43,8 @@ public class FilingWriterImpl implements FilingWriter {
 
     @Override
     public boolean write(FilingProcessed filingProcessed) throws FilingWriterException {
-        Message msg = getMessage(filingProcessed);
         try {
+            Message msg = createMessage(filingProcessed);
             producer.send(msg);
         } catch (Exception e) {
             throw new FilingWriterException(e);
@@ -47,16 +53,15 @@ public class FilingWriterImpl implements FilingWriter {
     }
 
 
-    private Message getMessage(FilingProcessed filingProcessed) {
+    private Message createMessage(FilingProcessed filingProcessed) throws SerializationException {
         Message m = new Message();
         m.setTopic(topicName);
         m.setValue(serialise(filingProcessed));
         return m;
     }
     
-    private byte[] serialise(FilingProcessed filingProcessed) {
-        //TODO implement
-        return filingProcessed.getApplicationId().getBytes();
+    private byte[] serialise(FilingProcessed filingProcessed) throws SerializationException {
+        return serializerFactory.getSpecificRecordSerializer(FilingProcessed.class).toBinary(filingProcessed);
     }
 
 }
