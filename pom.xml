@@ -24,6 +24,7 @@
         <!-- Dependency Versions -->
         <ch-kafka.version>1.4.2</ch-kafka.version>
         <kafka-models.version>1.0.10</kafka-models.version>
+        <jackson.databind.version>2.7.9</jackson.databind.version>
     </properties>
 
     <dependencies>
@@ -42,6 +43,12 @@
             <artifactId>kafka-models</artifactId>
             <version>${kafka-models.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        
     </dependencies>
 
     <build>
