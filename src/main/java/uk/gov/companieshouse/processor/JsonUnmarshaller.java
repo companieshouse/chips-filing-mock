@@ -2,8 +2,6 @@ package uk.gov.companieshouse.processor;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import uk.gov.companieshouse.Address;
 
 /**
@@ -11,10 +9,10 @@ import uk.gov.companieshouse.Address;
  *
  * Unmarshalls the json input string into a filing object.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public final class JsonUnmarshaller implements Unmarshaller {
 
-    public Address unmarshallDataStringForAddress(String json) throws IOException {
+public class JsonUnmarshaller implements Unmarshaller {
+
+    public Address unmarshallAddress(String json) throws IOException {
         return getObjectMapper().readValue(json, Address.class);
     }
 

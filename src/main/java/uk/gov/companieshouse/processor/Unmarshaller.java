@@ -24,7 +24,7 @@ public interface Unmarshaller {
      * @return
      * @throws IOException
      */
-    Address unmarshallDataStringForAddress(String json) throws IOException;
+    Address unmarshallAddress(String json) throws IOException;
 
 
 }
