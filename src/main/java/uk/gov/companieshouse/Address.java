@@ -1,21 +1,36 @@
 package uk.gov.companieshouse;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
  * Class to hold the data for the address objects
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class Address {
+    
+    @JsonProperty("address_line_1")
     private String addressLine1;
+    
+    @JsonProperty("address_line_2")
     private String addressLine2;
+    
+    @JsonProperty("country")
     private String country;
+    
+    @JsonProperty("locality")
     private String locality;
+    
+    @JsonProperty("po_box")
     private String poBox;
+    
+    @JsonProperty("postal_code")
     private String postalCode;
+    
+    @JsonProperty("premises")
     private String premises;
+    
+    @JsonProperty("region")
     private String region;
 
     public Address() {
@@ -25,7 +40,6 @@ public class Address {
         return addressLine1;
     }
     
-    @JsonSetter("address_line_1")
     public void setAddressLine1(String addressLine1) {
         this.addressLine1 = addressLine1;
     }
@@ -34,7 +48,6 @@ public class Address {
         return addressLine2;
     }
 
-    @JsonSetter("address_line_2")
     public void setAddressLine2(String addressLine2) {
         this.addressLine2 = addressLine2;
     }
@@ -61,7 +74,6 @@ public class Address {
         return poBox;
     }
 
-    @JsonSetter("po_box")
     public void setPoBox(String poBox) {
         this.poBox = poBox;
     }
@@ -70,7 +82,6 @@ public class Address {
         return postalCode;
     }
 
-    @JsonSetter("postal_code")
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
@@ -79,7 +90,6 @@ public class Address {
         return premises;
     }
 
-    @JsonSetter
     public void setPremises(String premises) {
         this.premises = premises;
     }
@@ -88,7 +98,6 @@ public class Address {
         return region;
     }
 
-    @JsonSetter
     public void setRegion(String region) {
         this.region = region;
     }
