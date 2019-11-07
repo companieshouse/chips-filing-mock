@@ -22,14 +22,17 @@ import uk.gov.companieshouse.kafka.message.Message;
 @Component
 public class FilingReaderImpl implements FilingReader {
     
+    @Value("${application.name}")
+    private String applicationName;
+    
     @Value("${kafka.broker.address}")
     private String brokerAddress;
     
-    @Value("${kafka.topic.filing.received}")
+    @Value("${kafka.consumer.topic}")
     private String topicName;
-    
-    @Value("${application.name}")
-    private String applicationName;
+
+    @Value("${kafka.consumer.pollTimeout:100}")
+    private long pollTimeout = 100;
     
     private CHKafkaConsumerGroup consumer;
     
@@ -41,7 +44,7 @@ public class FilingReaderImpl implements FilingReader {
         ConsumerConfig config = new ConsumerConfig();
         config.setBrokerAddresses(new String[] { brokerAddress });
         config.setTopics(Arrays.asList(topicName));
-        config.setPollTimeout(100);
+        config.setPollTimeout(pollTimeout);
         config.setGroupName(applicationName);
 
         consumer = new CHKafkaConsumerGroup(config);
