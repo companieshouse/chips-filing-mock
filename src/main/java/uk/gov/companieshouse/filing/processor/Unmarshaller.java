@@ -1,11 +1,11 @@
-package uk.gov.companieshouse.processor;
+package uk.gov.companieshouse.filing.processor;
 
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import uk.gov.companieshouse.Address;
+import uk.gov.companieshouse.filing.model.Address;
 
 public interface Unmarshaller {
 

@@ -1,8 +1,8 @@
-package uk.gov.companieshouse.processor;
+package uk.gov.companieshouse.filing.processor;
 
 import java.io.IOException;
 
-import uk.gov.companieshouse.Address;
+import uk.gov.companieshouse.filing.model.Address;
 
 /**
  * JsonUnmarshaller class

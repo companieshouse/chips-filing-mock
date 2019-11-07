@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.processor;
+package uk.gov.companieshouse.filing.processor;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -10,7 +10,7 @@ import java.util.Locale;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
-import uk.gov.companieshouse.Address;
+import uk.gov.companieshouse.filing.model.Address;
 import uk.gov.companieshouse.filing.processed.FilingProcessed;
 import uk.gov.companieshouse.filing.processed.PresenterRecord;
 import uk.gov.companieshouse.filing.processed.RejectRecord;

@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.processor;
+package uk.gov.companieshouse.filing.processor;
 
 import uk.gov.companieshouse.filing.processed.FilingProcessed;
 import uk.gov.companieshouse.filing.received.FilingReceived;

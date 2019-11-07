@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.reader;
+package uk.gov.companieshouse.filing.reader;
 
 import java.util.Collection;
 
