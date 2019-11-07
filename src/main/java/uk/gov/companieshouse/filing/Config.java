@@ -1,12 +1,13 @@
-package uk.gov.companieshouse;
+package uk.gov.companieshouse.filing;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import uk.gov.companieshouse.kafka.deserialization.DeserializerFactory;
 import uk.gov.companieshouse.kafka.serialization.SerializerFactory;
 
-@org.springframework.context.annotation.Configuration
-public class Configuration {
+@Configuration
+public class Config {
     
     @Bean
     SerializerFactory serializerFactory() {

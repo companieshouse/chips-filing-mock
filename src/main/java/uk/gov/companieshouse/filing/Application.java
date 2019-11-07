@@ -1,4 +1,4 @@
-package uk.gov.companieshouse;
+package uk.gov.companieshouse.filing;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -6,10 +6,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import uk.gov.companieshouse.processor.FilingProcessor;
-import uk.gov.companieshouse.reader.FilingReader;
-import uk.gov.companieshouse.writer.FilingWriter;
-import uk.gov.companieshouse.writer.FilingWriterException;
+import uk.gov.companieshouse.filing.processor.FilingProcessor;
+import uk.gov.companieshouse.filing.reader.FilingReader;
+import uk.gov.companieshouse.filing.writer.FilingWriter;
+import uk.gov.companieshouse.filing.writer.FilingWriterException;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {

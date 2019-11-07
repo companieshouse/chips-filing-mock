@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.writer;
+package uk.gov.companieshouse.filing.writer;
 
 public class FilingWriterException extends Exception {
 
