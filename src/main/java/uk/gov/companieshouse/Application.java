@@ -23,7 +23,7 @@ public class Application implements CommandLineRunner {
 
     private boolean running = true;
     
-    @Value("${kafka.consumer.sleep}")
+    @Value("${application.waitTimeMs:1000}")
     private long sleepTime = 1000; //ms
 
     public static void main(String[] args) {

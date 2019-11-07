@@ -21,8 +21,14 @@ public class FilingWriterImpl implements FilingWriter {
     @Value("${kafka.broker.address}")
     private String brokerAddress;
     
-    @Value("${kafka.topic.filing.processed}")
+    @Value("${kafka.producer.topic}")
     private String topicName;
+
+    @Value("${kafka.producer.retries:10}")
+    private int retries = 10;
+
+    @Value("${kafka.producer.maxBlockMs:1000}")
+    private int maxBlockMilliseconds = 1000;
     
     private CHKafkaProducer producer;
     
@@ -34,8 +40,8 @@ public class FilingWriterImpl implements FilingWriter {
         ProducerConfig config = new ProducerConfig();
         config.setBrokerAddresses(new String[] { brokerAddress });
         config.setAcks(Acks.WAIT_FOR_LOCAL);
-        config.setRetries(10);
-        config.setRoundRobinPartitioner(false);
+        config.setRetries(retries);
+        config.setMaxBlockMilliseconds(maxBlockMilliseconds);
 
         producer = new CHKafkaProducer(config);
     }
