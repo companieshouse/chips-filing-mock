@@ -32,9 +32,6 @@ public class Address {
     
     @JsonProperty("region")
     private String region;
-
-    public Address() {
-    }
     
     public String getAddressLine1() {
         return addressLine1;

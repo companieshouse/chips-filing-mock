@@ -6,29 +6,25 @@ public class FilingProcessingException extends Exception {
 
     private static final long serialVersionUID = 2081072809279727919L;
 
-    private FilingReceived filingReceived;
+    private final FilingReceived filingReceived;
 
     public FilingProcessingException(FilingReceived filingReceived) {
         super();
-        setFilingReceived(filingReceived);
+        this.filingReceived = filingReceived;
     }
 
     public FilingProcessingException(String message, FilingReceived filingReceived, Throwable cause) {
         super(message, cause);
-        setFilingReceived(filingReceived);
+        this.filingReceived = filingReceived;
     }
 
     public FilingProcessingException(String message, FilingReceived filingReceived) {
         super(message);
-        setFilingReceived(filingReceived);
+        this.filingReceived = filingReceived;
     }
     
     public FilingProcessingException(FilingReceived filingReceived, Throwable cause) {
         super(cause);
-        setFilingReceived(filingReceived);
-    }
-   
-    public void setFilingReceived(FilingReceived filingReceived) {
         this.filingReceived = filingReceived;
     }
 
