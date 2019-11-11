@@ -24,6 +24,7 @@
         <!-- Dependency Versions -->
         <ch-kafka.version>1.4.2</ch-kafka.version>
         <kafka-models.version>1.0.10</kafka-models.version>
+        <structured-logging.version>1.7.0</structured-logging.version>
     </properties>
 
     <dependencies>
@@ -41,6 +42,11 @@
             <groupId>uk.gov.companieshouse</groupId>
             <artifactId>kafka-models</artifactId>
             <version>${kafka-models.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.companieshouse</groupId>
+            <artifactId>structured-logging</artifactId>
+            <version>${structured-logging.version}</version>
         </dependency>
         
         <dependency>

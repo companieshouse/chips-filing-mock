@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
+import uk.gov.companieshouse.filing.Application;
 import uk.gov.companieshouse.filing.model.Address;
 import uk.gov.companieshouse.filing.processed.FilingProcessed;
 import uk.gov.companieshouse.filing.processed.PresenterRecord;
@@ -18,10 +21,14 @@ import uk.gov.companieshouse.filing.processed.ResponseRecord;
 import uk.gov.companieshouse.filing.processed.SubmissionRecord;
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filing.received.Transaction;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
 
 @Component
 public class FilingProcessorImpl implements FilingProcessor {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Application.APPLICATION_NAME);
+    
     private static final String ACCEPTED = "accepted";
     private static final String REJECTED = "rejected";
     private static final String CH_POSTCODE = "CF143UZ";
@@ -30,7 +37,8 @@ public class FilingProcessorImpl implements FilingProcessor {
     private final SimpleDateFormat sdk = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
     
     @Override
-    public FilingProcessed process(FilingReceived filingReceived) {
+    public FilingProcessed process(FilingReceived filingReceived) throws FilingProcessingException {
+        LOG.trace("Processing filing for transaction id = " + filingReceived.getSubmission().getTransactionId());
         FilingProcessed processed = new FilingProcessed();
         processed.setApplicationId(filingReceived.getApplicationId());
         processed.setAttempt(1);
@@ -43,10 +51,15 @@ public class FilingProcessorImpl implements FilingProcessor {
         SubmissionRecord submissionRecord = new SubmissionRecord();
         submissionRecord.setTransactionId(filingReceived.getSubmission().getTransactionId());
         processed.setSubmission(submissionRecord);
+        
+        Map<String, Object> loggedData = new HashMap<>();
+        loggedData.put("transaction_id", filingReceived.getSubmission().getTransactionId());
+        loggedData.put("status", processed.getResponse().getStatus());
+        LOG.info("Filing processed successfully", loggedData);
         return processed;
     }
 
-    private ResponseRecord createResponse(FilingReceived filingReceived) {
+    private ResponseRecord createResponse(FilingReceived filingReceived) throws FilingProcessingException {
         ResponseRecord response = new ResponseRecord();
         response.setCompanyName(filingReceived.getSubmission().getCompanyName());
         response.setCompanyNumber(filingReceived.getSubmission().getCompanyNumber());
@@ -61,7 +74,7 @@ public class FilingProcessorImpl implements FilingProcessor {
                 response.setStatus(ACCEPTED);
             }
         } catch (IOException e) {
-            // JSON address not valid - do nothing
+            throw new FilingProcessingException(filingReceived, e);
         }
 
         response.setSubmissionId(filingReceived.getItems().get(0).getSubmissionId()); // get first item
