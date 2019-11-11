@@ -37,7 +37,7 @@ public class Application implements CommandLineRunner {
     private long sleepTime = 1000; // ms
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(Application.class, new String[0]);
     }
 
     @Override
