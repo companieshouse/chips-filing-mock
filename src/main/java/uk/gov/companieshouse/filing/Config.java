@@ -18,4 +18,9 @@ public class Config {
     DeserializerFactory deserializerFactory() {
         return new DeserializerFactory();
     }
+    
+    @Bean
+    String applicationName() {
+        return Application.APPLICATION_NAME;
+    }
 }

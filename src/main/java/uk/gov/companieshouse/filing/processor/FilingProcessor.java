@@ -11,7 +11,8 @@ public interface FilingProcessor {
      * 
      * @param filingReceived
      * @return
+     * @throws FilingProcessingException
      */
-    FilingProcessed process(FilingReceived filingReceived);
+    FilingProcessed process(FilingReceived filingReceived) throws FilingProcessingException;
 
 }

@@ -12,17 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import uk.gov.companieshouse.filing.Application;
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.kafka.consumer.CHKafkaConsumerGroup;
 import uk.gov.companieshouse.kafka.consumer.ConsumerConfig;
 import uk.gov.companieshouse.kafka.deserialization.DeserializerFactory;
 import uk.gov.companieshouse.kafka.exceptions.DeserializationException;
 import uk.gov.companieshouse.kafka.message.Message;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
 
 @Component
 public class FilingReaderImpl implements FilingReader {
+    private static final Logger LOG = LoggerFactory.getLogger(Application.APPLICATION_NAME);
     
-    @Value("${application.name}")
+    @Autowired
     private String applicationName;
     
     @Value("${kafka.broker.address}")
@@ -63,8 +67,7 @@ public class FilingReaderImpl implements FilingReader {
             try {
                 receivedList.add(deserialise(msg));
             } catch (Exception e) {
-                // TODO Log error
-                e.printStackTrace();
+                LOG.error("Failed to read message from queue", e);
             }
         }
         return receivedList;
