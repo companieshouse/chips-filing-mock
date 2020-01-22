@@ -3,7 +3,6 @@ package uk.gov.companieshouse.filing.processor;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -21,6 +20,7 @@ import uk.gov.companieshouse.filing.processed.ResponseRecord;
 import uk.gov.companieshouse.filing.processed.SubmissionRecord;
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filing.received.Transaction;
+import uk.gov.companieshouse.filing.util.DateService;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 
@@ -35,6 +35,8 @@ public class FilingProcessorImpl implements FilingProcessor {
     private static final String CH_POSTCODE_ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
     private static final String CH_POSTCODE_WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau";
     private final SimpleDateFormat sdk = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
+    
+    private DateService dateService;
     
     @Override
     public FilingProcessed process(FilingReceived filingReceived) throws FilingProcessingException {
@@ -63,7 +65,7 @@ public class FilingProcessorImpl implements FilingProcessor {
         ResponseRecord response = new ResponseRecord();
         response.setCompanyName(filingReceived.getSubmission().getCompanyName());
         response.setCompanyNumber(filingReceived.getSubmission().getCompanyNumber());
-        String formattedDate = sdk.format(new Date());
+        String formattedDate = sdk.format(dateService.now());
         response.setDateOfCreation(formattedDate); // now ?
         response.setProcessedAt(formattedDate); // now ?
         try {

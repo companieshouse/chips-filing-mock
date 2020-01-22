@@ -2,6 +2,7 @@ package uk.gov.companieshouse.filing;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import uk.gov.companieshouse.filing.processed.FilingProcessed;
 import uk.gov.companieshouse.filing.processor.FilingProcessingException;
 import uk.gov.companieshouse.filing.processor.FilingProcessor;
 import uk.gov.companieshouse.filing.reader.FilingReader;
@@ -44,20 +46,33 @@ public class Application implements CommandLineRunner {
     public void run(String... args) throws InterruptedException {
         LOG.info(APPLICATION_NAME + " : running...");
         while (running) {
-            for (FilingReceived filingReceived : reader.read()) {
-                try {
-                    writer.write(processor.process(filingReceived));
-                } catch (FilingProcessingException e) {
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("transactionId", filingReceived.getSubmission().getTransactionId());
-                    LOG.error("Failure processing message", e, data);
-                } catch (FilingWriterException e) {
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("transactionId", filingReceived.getSubmission().getTransactionId());
-                    LOG.error("Failure writing message to queue", e, data);
-                }
-            }
+            processFilings();
             Thread.sleep(sleepTime);
+        }
+    }
+
+    public void processFilings() {
+        reader.read().stream().map(this::processFiling).filter(Objects::nonNull).forEach(this::writeFiling);
+    }
+
+    private FilingProcessed processFiling(FilingReceived received) {
+        try {
+            return processor.process(received);
+        } catch (FilingProcessingException e) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("transactionId", received.getSubmission().getTransactionId());
+            LOG.error("Failure processing message", e, data);
+            return null;
+        }
+    }
+
+    private void writeFiling(FilingProcessed processed) {
+        try {
+            writer.write(processed);
+        } catch (FilingWriterException e) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("transactionId", processed.getSubmission().getTransactionId());
+            LOG.error("Failure processing message", e, data);
         }
     }
 }
