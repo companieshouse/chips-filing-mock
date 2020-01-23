@@ -71,7 +71,7 @@ public class FilingReaderImpl implements FilingReader {
                 receivedList.add(deserialise(msg));
             } catch (Exception e) {
                 Map<String, Object> data = new HashMap<>();
-                data.put("message", msg.getValue() == null ? "" : msg.getValue().toString());
+                data.put("message", msg.getValue() == null ? "" : new String(msg.getValue()));
                 LOG.error("Failed to read message from queue", e, data);
             }
         }
