@@ -1,9 +1,14 @@
 package uk.gov.companieshouse.filing.util;
 
-import java.util.Date;
+import java.time.Instant;
 
 public interface DateService {
 
-    Date now();
+    /**
+     * Obtains the current instant
+     * 
+     * @return the current instant, not null
+     */
+    Instant now();
 
 }
