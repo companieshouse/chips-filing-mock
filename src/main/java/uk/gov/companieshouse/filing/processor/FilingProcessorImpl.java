@@ -1,11 +1,11 @@
 package uk.gov.companieshouse.filing.processor;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -35,8 +35,7 @@ public class FilingProcessorImpl implements FilingProcessor {
     private static final String CH_POSTCODE = "CF143UZ";
     private static final String CH_POSTCODE_ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
     private static final String CH_POSTCODE_WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau";
-    private final SimpleDateFormat sdk = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
-    
+
     @Autowired
     private DateService dateService;
     
@@ -67,7 +66,7 @@ public class FilingProcessorImpl implements FilingProcessor {
         ResponseRecord response = new ResponseRecord();
         response.setCompanyName(filingReceived.getSubmission().getCompanyName());
         response.setCompanyNumber(filingReceived.getSubmission().getCompanyNumber());
-        String formattedDate = sdk.format(dateService.now());
+        String formattedDate = DateTimeFormatter.ISO_INSTANT.format(dateService.now().truncatedTo(ChronoUnit.SECONDS));
         response.setDateOfCreation(formattedDate); // now ?
         response.setProcessedAt(formattedDate); // now ?
         try {

@@ -7,9 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,10 @@ import uk.gov.companieshouse.filing.util.DateService;
 
 @ExtendWith(MockitoExtension.class)
 public class FilingProcessorImplTest {
+    
+    private static final Instant INSTANT = ZonedDateTime.of(2020, 2, 17, 23, 9, 56, 250, ZoneOffset.UTC).toInstant();
+
+    private static final String DATE_TIME_STRING = "2020-02-17T23:09:56Z";
 
     @InjectMocks
     private FilingProcessorImpl processor;
@@ -35,9 +40,7 @@ public class FilingProcessorImplTest {
     
     @Test
     public void processAcceptedAddressWithoutPostCode() throws Exception {
-        Date now = new Date();
-        when(dateService.now()).thenReturn(now);
-        final String nowString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(now);
+        when(dateService.now()).thenReturn(INSTANT);
 
         Transaction transaction = new Transaction();
         transaction.setData("{}");
@@ -53,17 +56,15 @@ public class FilingProcessorImplTest {
         assertEquals(received.getSubmission().getTransactionId(), processed.getSubmission().getTransactionId());
         assertEquals(received.getSubmission().getCompanyName(), processed.getResponse().getCompanyName());
         assertEquals(received.getSubmission().getCompanyNumber(), processed.getResponse().getCompanyNumber());
-        assertEquals(nowString, processed.getResponse().getProcessedAt());
-        assertEquals(nowString, processed.getResponse().getDateOfCreation());
+        assertEquals(DATE_TIME_STRING, processed.getResponse().getProcessedAt());
+        assertEquals(DATE_TIME_STRING, processed.getResponse().getDateOfCreation());
         assertEquals("accepted", processed.getResponse().getStatus());
         assertNull(processed.getResponse().getReject());
     }
 
     @Test
     public void processAcceptedAddressNotChPostCode() throws Exception {
-        Date now = new Date();
-        when(dateService.now()).thenReturn(now);
-        final String nowString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(now);
+        when(dateService.now()).thenReturn(INSTANT);
 
         Transaction transaction = new Transaction();
         transaction.setData("{\"postal_code\":\"NR14 3UZ\"}");
@@ -79,17 +80,15 @@ public class FilingProcessorImplTest {
         assertEquals(received.getSubmission().getTransactionId(), processed.getSubmission().getTransactionId());
         assertEquals(received.getSubmission().getCompanyName(), processed.getResponse().getCompanyName());
         assertEquals(received.getSubmission().getCompanyNumber(), processed.getResponse().getCompanyNumber());
-        assertEquals(nowString, processed.getResponse().getProcessedAt());
-        assertEquals(nowString, processed.getResponse().getDateOfCreation());
+        assertEquals(DATE_TIME_STRING, processed.getResponse().getProcessedAt());
+        assertEquals(DATE_TIME_STRING, processed.getResponse().getDateOfCreation());
         assertEquals("accepted", processed.getResponse().getStatus());
         assertNull(processed.getResponse().getReject());
     }
     
     @Test
     public void processRejectedAddressChPostCode() throws Exception {
-        Date now = new Date();
-        when(dateService.now()).thenReturn(now);
-        final String nowString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(now);
+        when(dateService.now()).thenReturn(INSTANT);
 
         Transaction transaction = new Transaction();
         transaction.setData("{\"postal_code\":\"CF14 3UZ\"}");
@@ -105,8 +104,8 @@ public class FilingProcessorImplTest {
         assertEquals(received.getSubmission().getTransactionId(), processed.getSubmission().getTransactionId());
         assertEquals(received.getSubmission().getCompanyName(), processed.getResponse().getCompanyName());
         assertEquals(received.getSubmission().getCompanyNumber(), processed.getResponse().getCompanyNumber());
-        assertEquals(nowString, processed.getResponse().getProcessedAt());
-        assertEquals(nowString, processed.getResponse().getDateOfCreation());
+        assertEquals(DATE_TIME_STRING, processed.getResponse().getProcessedAt());
+        assertEquals(DATE_TIME_STRING, processed.getResponse().getDateOfCreation());
         assertEquals("rejected", processed.getResponse().getStatus());
         assertNotNull(processed.getResponse().getReject());
         assertTrue(processed.getResponse().getReject().getReasonsEnglish().contains("The postcode you have supplied cannot be Companies House postcode"));
@@ -115,8 +114,7 @@ public class FilingProcessorImplTest {
     
     @Test
     public void processInvalidTransactionData() throws Exception {
-        Date now = new Date();
-        when(dateService.now()).thenReturn(now);
+        when(dateService.now()).thenReturn(INSTANT);
         
         Transaction transaction = new Transaction();
         transaction.setData("invalid data");

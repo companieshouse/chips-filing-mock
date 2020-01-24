@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.filing.util;
 
-import java.util.Date;
+import java.time.Instant;
 
 import org.springframework.stereotype.Service;
 
@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 public class DateServiceImpl implements DateService {
 
     @Override
-    public Date now() {
-        return new Date();
+    public Instant now() {
+        return Instant.now();
     }
-
 }
