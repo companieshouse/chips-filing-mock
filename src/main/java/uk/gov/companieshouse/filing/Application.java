@@ -51,7 +51,7 @@ public class Application implements CommandLineRunner {
         }
     }
 
-    public void processFilings() {
+    protected void processFilings() {
         reader.read().stream().map(this::processFiling).filter(Objects::nonNull).forEach(this::writeFiling);
     }
 
