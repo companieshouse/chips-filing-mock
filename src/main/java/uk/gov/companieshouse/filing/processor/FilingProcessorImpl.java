@@ -3,9 +3,7 @@ package uk.gov.companieshouse.filing.processor;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,11 +12,7 @@ import org.springframework.stereotype.Component;
 
 import uk.gov.companieshouse.filing.Application;
 import uk.gov.companieshouse.filing.model.Address;
-import uk.gov.companieshouse.filing.processed.FilingProcessed;
-import uk.gov.companieshouse.filing.processed.PresenterRecord;
-import uk.gov.companieshouse.filing.processed.RejectRecord;
-import uk.gov.companieshouse.filing.processed.ResponseRecord;
-import uk.gov.companieshouse.filing.processed.SubmissionRecord;
+import uk.gov.companieshouse.filing.model.FilingProcessed;
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filing.util.DateService;
@@ -47,57 +41,32 @@ public class FilingProcessorImpl implements FilingProcessor {
         LOG.trace("Processing filing for transaction id = " + filingReceived.getSubmission().getTransactionId());
         FilingProcessed processed = new FilingProcessed();
         processed.setApplicationId(filingReceived.getApplicationId());
-        processed.setAttempt(1);
         processed.setChannelId(filingReceived.getChannelId());
-        PresenterRecord presenterRecord = new PresenterRecord();
-        presenterRecord.setLanguage(filingReceived.getPresenter().getLanguage());
-        presenterRecord.setUserId(filingReceived.getPresenter().getUserId());
-        processed.setPresenter(presenterRecord);
-        processed.setResponse(createResponse(filingReceived));
-        SubmissionRecord submissionRecord = new SubmissionRecord();
-        submissionRecord.setTransactionId(filingReceived.getSubmission().getTransactionId());
-        processed.setSubmission(submissionRecord);
+        processed.setCompanyName(filingReceived.getSubmission().getCompanyName());
+        processed.setCompanyNumber(filingReceived.getSubmission().getCompanyNumber());
+        processed.setPresenterLanguage(filingReceived.getPresenter().getLanguage());
+        processed.setPresenterId(filingReceived.getPresenter().getUserId());
+        processed.setTransactionId(filingReceived.getSubmission().getTransactionId());
+        processed.setSubmissionId(filingReceived.getItems().get(0).getSubmissionId()); // get first item
         
-        Map<String, Object> loggedData = new HashMap<>();
-        loggedData.put("transaction_id", filingReceived.getSubmission().getTransactionId());
-        loggedData.put("status", processed.getResponse().getStatus());
-        LOG.info("Filing processed successfully", loggedData);
-        return processed;
-    }
-
-    private ResponseRecord createResponse(FilingReceived filingReceived) throws FilingProcessingException {
-        ResponseRecord response = new ResponseRecord();
-        response.setCompanyName(filingReceived.getSubmission().getCompanyName());
-        response.setCompanyNumber(filingReceived.getSubmission().getCompanyNumber());
-        String formattedDate = DateTimeFormatter.ISO_INSTANT.format(dateService.now().truncatedTo(ChronoUnit.SECONDS));
-        response.setDateOfCreation(formattedDate); // now ?
-        response.setProcessedAt(formattedDate); // now ?
         try {
             if (isCompaniesHouseAddress(filingReceived)) {
-                response.setStatus(REJECTED);
-                response.setReject(createRejectRecord(CH_POSTCODE_ENGLISH_REJECT, CH_POSTCODE_WELSH_REJECT));
+                processed.setStatus(REJECTED);
+                processed.addRejection(CH_POSTCODE_ENGLISH_REJECT, CH_POSTCODE_WELSH_REJECT);
             } else {
-                response.setStatus(ACCEPTED);
+                processed.setStatus(ACCEPTED);
             }
         } catch (IOException e) {
             throw new FilingProcessingException(filingReceived, e);
         }
-
-        response.setSubmissionId(filingReceived.getItems().get(0).getSubmissionId()); // get first item
-        return response;
-    }
-
-    private RejectRecord createRejectRecord(String englishReject, String welshReject) {
-        RejectRecord rejectRecord = new RejectRecord();
-
-        List<String> engRejReason = new ArrayList<>();
-        engRejReason.add(englishReject);
-        rejectRecord.setReasonsEnglish(engRejReason);
-
-        List<String> welshRejReason = new ArrayList<>();
-        welshRejReason.add(welshReject);
-        rejectRecord.setReasonsWelsh(welshRejReason);
-        return rejectRecord;
+        String formattedDate = DateTimeFormatter.ISO_INSTANT.format(dateService.now().truncatedTo(ChronoUnit.SECONDS));
+        processed.setProcessedAt(formattedDate);
+        
+        Map<String, Object> loggedData = new HashMap<>();
+        loggedData.put("transaction id", filingReceived.getSubmission().getTransactionId());
+        loggedData.put("status", processed.getStatus());
+        LOG.info("Filing processed successfully", loggedData);
+        return processed;
     }
 
     private boolean isCompaniesHouseAddress(FilingReceived filingReceived) throws IOException {

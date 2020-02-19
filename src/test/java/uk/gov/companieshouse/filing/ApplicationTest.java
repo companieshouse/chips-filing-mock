@@ -15,11 +15,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.companieshouse.filing.processed.FilingProcessed;
+import uk.gov.companieshouse.filing.model.FilingProcessed;
 import uk.gov.companieshouse.filing.processor.FilingProcessingException;
 import uk.gov.companieshouse.filing.processor.FilingProcessor;
 import uk.gov.companieshouse.filing.reader.FilingReader;
 import uk.gov.companieshouse.filing.received.FilingReceived;
+import uk.gov.companieshouse.filing.received.SubmissionRecord;
 import uk.gov.companieshouse.filing.writer.FilingWriter;
 import uk.gov.companieshouse.filing.writer.FilingWriterException;
 
@@ -114,7 +115,7 @@ public class ApplicationTest {
     }
 
     private FilingReceived createFilingReceived(String applicationId) {
-        uk.gov.companieshouse.filing.received.SubmissionRecord submission = new uk.gov.companieshouse.filing.received.SubmissionRecord();
+        SubmissionRecord submission = new SubmissionRecord();
         submission.setTransactionId("T" + applicationId);
 
         FilingReceived received = new FilingReceived();
@@ -124,11 +125,8 @@ public class ApplicationTest {
     }
     
     private FilingProcessed createFilingProcessed(String applicationId) {
-        uk.gov.companieshouse.filing.processed.SubmissionRecord submission = new uk.gov.companieshouse.filing.processed.SubmissionRecord();
-        submission.setTransactionId("T" + applicationId);
-
         FilingProcessed processed = new FilingProcessed();
-        processed.setSubmission(submission);
+        processed.setTransactionId("T" + applicationId);
         processed.setApplicationId(applicationId);
         return processed;
     }

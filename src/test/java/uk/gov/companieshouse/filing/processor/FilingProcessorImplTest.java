@@ -1,8 +1,6 @@
 package uk.gov.companieshouse.filing.processor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -21,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.companieshouse.filing.model.Address;
-import uk.gov.companieshouse.filing.processed.FilingProcessed;
+import uk.gov.companieshouse.filing.model.FilingProcessed;
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filing.received.PresenterRecord;
 import uk.gov.companieshouse.filing.received.SubmissionRecord;
@@ -70,17 +68,17 @@ public class FilingProcessorImplTest {
         FilingProcessed processed = processor.process(received);
         
         assertEquals(received.getApplicationId(), processed.getApplicationId());
-        assertEquals(1, processed.getAttempt());
         assertEquals(received.getChannelId(), processed.getChannelId());
-        assertEquals(received.getPresenter().getLanguage(), processed.getPresenter().getLanguage());
-        assertEquals(received.getPresenter().getUserId(), processed.getPresenter().getUserId());
-        assertEquals(received.getSubmission().getTransactionId(), processed.getSubmission().getTransactionId());
-        assertEquals(received.getSubmission().getCompanyName(), processed.getResponse().getCompanyName());
-        assertEquals(received.getSubmission().getCompanyNumber(), processed.getResponse().getCompanyNumber());
-        assertEquals(DATE_TIME_STRING, processed.getResponse().getProcessedAt());
-        assertEquals(DATE_TIME_STRING, processed.getResponse().getDateOfCreation());
-        assertEquals("accepted", processed.getResponse().getStatus());
-        assertNull(processed.getResponse().getReject());
+        assertEquals(received.getPresenter().getLanguage(), processed.getPresenterLanguage());
+        assertEquals(received.getPresenter().getUserId(), processed.getPresenterId());
+        assertEquals(received.getSubmission().getTransactionId(), processed.getTransactionId());
+        assertEquals(transaction.getSubmissionId(), processed.getSubmissionId());
+        assertEquals(received.getSubmission().getCompanyName(), processed.getCompanyName());
+        assertEquals(received.getSubmission().getCompanyNumber(), processed.getCompanyNumber());
+        assertEquals(DATE_TIME_STRING, processed.getProcessedAt());
+        assertEquals("accepted", processed.getStatus());
+        assertTrue(processed.getRejectionEnglish().isEmpty());
+        assertTrue(processed.getRejectionWelsh().isEmpty());
     }
 
     @Test
@@ -93,17 +91,18 @@ public class FilingProcessorImplTest {
         FilingProcessed processed = processor.process(received);
         
         assertEquals(received.getApplicationId(), processed.getApplicationId());
-        assertEquals(1, processed.getAttempt());
         assertEquals(received.getChannelId(), processed.getChannelId());
-        assertEquals(received.getPresenter().getLanguage(), processed.getPresenter().getLanguage());
-        assertEquals(received.getPresenter().getUserId(), processed.getPresenter().getUserId());
-        assertEquals(received.getSubmission().getTransactionId(), processed.getSubmission().getTransactionId());
-        assertEquals(received.getSubmission().getCompanyName(), processed.getResponse().getCompanyName());
-        assertEquals(received.getSubmission().getCompanyNumber(), processed.getResponse().getCompanyNumber());
-        assertEquals(DATE_TIME_STRING, processed.getResponse().getProcessedAt());
-        assertEquals(DATE_TIME_STRING, processed.getResponse().getDateOfCreation());
-        assertEquals("accepted", processed.getResponse().getStatus());
-        assertNull(processed.getResponse().getReject());
+        assertEquals(received.getPresenter().getLanguage(), processed.getPresenterLanguage());
+        assertEquals(received.getPresenter().getUserId(), processed.getPresenterId());
+        assertEquals(received.getSubmission().getTransactionId(), processed.getTransactionId());
+        assertEquals(transaction.getSubmissionId(), processed.getSubmissionId());
+        assertEquals(received.getSubmission().getCompanyName(), processed.getCompanyName());
+        assertEquals(received.getSubmission().getCompanyNumber(), processed.getCompanyNumber());
+        assertEquals(DATE_TIME_STRING, processed.getProcessedAt());
+        assertEquals("accepted", processed.getStatus());
+        assertTrue(processed.getRejectionEnglish().isEmpty());
+        assertTrue(processed.getRejectionWelsh().isEmpty());
+
     }
     
     @Test
@@ -116,25 +115,21 @@ public class FilingProcessorImplTest {
         FilingProcessed processed = processor.process(received);
         
         assertEquals(received.getApplicationId(), processed.getApplicationId());
-        assertEquals(1, processed.getAttempt());
         assertEquals(received.getChannelId(), processed.getChannelId());
-        assertEquals(received.getPresenter().getLanguage(), processed.getPresenter().getLanguage());
-        assertEquals(received.getPresenter().getUserId(), processed.getPresenter().getUserId());
-        assertEquals(received.getSubmission().getTransactionId(), processed.getSubmission().getTransactionId());
-        assertEquals(received.getSubmission().getCompanyName(), processed.getResponse().getCompanyName());
-        assertEquals(received.getSubmission().getCompanyNumber(), processed.getResponse().getCompanyNumber());
-        assertEquals(DATE_TIME_STRING, processed.getResponse().getProcessedAt());
-        assertEquals(DATE_TIME_STRING, processed.getResponse().getDateOfCreation());
-        assertEquals("rejected", processed.getResponse().getStatus());
-        assertNotNull(processed.getResponse().getReject());
-        assertTrue(processed.getResponse().getReject().getReasonsEnglish().contains("The postcode you have supplied cannot be Companies House postcode"));
-        assertTrue(processed.getResponse().getReject().getReasonsWelsh().contains("Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau"));
+        assertEquals(received.getPresenter().getLanguage(), processed.getPresenterLanguage());
+        assertEquals(received.getPresenter().getUserId(), processed.getPresenterId());
+        assertEquals(received.getSubmission().getTransactionId(), processed.getTransactionId());
+        assertEquals(transaction.getSubmissionId(), processed.getSubmissionId());
+        assertEquals(received.getSubmission().getCompanyName(), processed.getCompanyName());
+        assertEquals(received.getSubmission().getCompanyNumber(), processed.getCompanyNumber());
+        assertEquals(DATE_TIME_STRING, processed.getProcessedAt());
+        assertEquals("rejected", processed.getStatus());
+        assertTrue(processed.getRejectionEnglish().contains("The postcode you have supplied cannot be Companies House postcode"));
+        assertTrue(processed.getRejectionWelsh().contains("Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau"));
     }
     
     @Test
     public void processInvalidTransactionData() throws Exception {
-        when(dateService.now()).thenReturn(INSTANT);
-
         when(unmarshaller.unmarshallAddress(transaction.getData())).thenThrow(IOException.class);
 
         assertThrows(FilingProcessingException.class, () -> processor.process(received));

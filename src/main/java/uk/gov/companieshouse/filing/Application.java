@@ -7,10 +7,11 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
-import uk.gov.companieshouse.filing.processed.FilingProcessed;
+import uk.gov.companieshouse.filing.model.FilingProcessed;
 import uk.gov.companieshouse.filing.processor.FilingProcessingException;
 import uk.gov.companieshouse.filing.processor.FilingProcessor;
 import uk.gov.companieshouse.filing.reader.FilingReader;
@@ -39,7 +40,7 @@ public class Application implements CommandLineRunner {
     private long sleepTime = 1000; // ms
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, new String[0]);
+        new SpringApplicationBuilder(Application.class).web(WebApplicationType.NONE).run(args);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class Application implements CommandLineRunner {
             writer.write(processed);
         } catch (FilingWriterException e) {
             Map<String, Object> data = new HashMap<>();
-            data.put("transaction id", processed.getSubmission().getTransactionId());
+            data.put("transaction id", processed.getTransactionId());
             LOG.error("Failure sending message", e, data);
         }
     }
