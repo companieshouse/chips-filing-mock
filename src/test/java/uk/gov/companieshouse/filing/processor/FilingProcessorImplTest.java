@@ -44,10 +44,20 @@ public class FilingProcessorImplTest {
     @Mock
     private Unmarshaller unmarshaller;
     
+    private Transaction transaction;
+    
+    private FilingReceived received;
+    
     private Address address;
     
     @BeforeEach
     public void setup() {
+        transaction = new Transaction();
+        transaction.setData("data");
+        transaction.setSubmissionId("SUBMISSION-ID");
+        
+        received = createFilingReceived(transaction);
+        
         address = new Address();
     }
     
@@ -55,9 +65,6 @@ public class FilingProcessorImplTest {
     public void processAcceptedAddressWithoutPostCode() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
 
-        Transaction transaction = new Transaction();
-        transaction.setData("{}");
-        FilingReceived received = createFilingReceived(transaction);
         when(unmarshaller.unmarshallAddress(transaction.getData())).thenReturn(address);
 
         FilingProcessed processed = processor.process(received);
@@ -80,9 +87,6 @@ public class FilingProcessorImplTest {
     public void processAcceptedAddressNotChPostCode() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
 
-        Transaction transaction = new Transaction();
-        transaction.setData("{\"postal_code\":\"NR14 3UZ\"}");
-        FilingReceived received = createFilingReceived(transaction);
         address.setPostalCode("NR14 3UZ");
         when(unmarshaller.unmarshallAddress(transaction.getData())).thenReturn(address);
 
@@ -106,9 +110,6 @@ public class FilingProcessorImplTest {
     public void processRejectedAddressChPostCode() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
 
-        Transaction transaction = new Transaction();
-        transaction.setData("{\"postal_code\":\"CF14 3UZ\"}");
-        FilingReceived received = createFilingReceived(transaction);
         address.setPostalCode("CF14 3UZ");
         when(unmarshaller.unmarshallAddress(transaction.getData())).thenReturn(address);
 
@@ -133,12 +134,8 @@ public class FilingProcessorImplTest {
     @Test
     public void processInvalidTransactionData() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
-        
-        Transaction transaction = new Transaction();
-        transaction.setData("invalid data");
 
         when(unmarshaller.unmarshallAddress(transaction.getData())).thenThrow(IOException.class);
-        FilingReceived received = createFilingReceived(transaction);
 
         assertThrows(FilingProcessingException.class, () -> processor.process(received));
     }
