@@ -51,17 +51,21 @@ public class Application implements CommandLineRunner {
         }
     }
 
-    public void processFilings() {
+    protected void processFilings() {
         reader.read().stream().map(this::processFiling).filter(Objects::nonNull).forEach(this::writeFiling);
     }
 
     private FilingProcessed processFiling(FilingReceived received) {
+        Map<String, Object> data = new HashMap<>();
+        if (received.getSubmission() != null) {
+            data.put("transaction id", received.getSubmission().getTransactionId());
+            data.put("company number", received.getSubmission().getCompanyNumber());
+        }
         try {
+            LOG.trace("Filing received", data);
             return processor.process(received);
         } catch (FilingProcessingException e) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("transactionId", received.getSubmission().getTransactionId());
-            LOG.error("Failure processing message", e, data);
+            LOG.error("Failure processing filing", e, data);
             return null;
         }
     }
@@ -71,8 +75,8 @@ public class Application implements CommandLineRunner {
             writer.write(processed);
         } catch (FilingWriterException e) {
             Map<String, Object> data = new HashMap<>();
-            data.put("transactionId", processed.getSubmission().getTransactionId());
-            LOG.error("Failure processing message", e, data);
+            data.put("transaction id", processed.getSubmission().getTransactionId());
+            LOG.error("Failure sending message", e, data);
         }
     }
 }

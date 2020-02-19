@@ -7,17 +7,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import uk.gov.companieshouse.filing.model.Address;
 import uk.gov.companieshouse.filing.processed.FilingProcessed;
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filing.received.PresenterRecord;
@@ -38,13 +41,31 @@ public class FilingProcessorImplTest {
     @Mock
     private DateService dateService;
     
+    @Mock
+    private Unmarshaller unmarshaller;
+    
+    private Transaction transaction;
+    
+    private FilingReceived received;
+    
+    private Address address;
+    
+    @BeforeEach
+    public void setup() {
+        transaction = new Transaction();
+        transaction.setData("data");
+        transaction.setSubmissionId("SUBMISSION-ID");
+        
+        received = createFilingReceived(transaction);
+        
+        address = new Address();
+    }
+    
     @Test
     public void processAcceptedAddressWithoutPostCode() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
 
-        Transaction transaction = new Transaction();
-        transaction.setData("{}");
-        FilingReceived received = createFilingReceived(transaction);
+        when(unmarshaller.unmarshallAddress(transaction.getData())).thenReturn(address);
 
         FilingProcessed processed = processor.process(received);
         
@@ -66,9 +87,8 @@ public class FilingProcessorImplTest {
     public void processAcceptedAddressNotChPostCode() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
 
-        Transaction transaction = new Transaction();
-        transaction.setData("{\"postal_code\":\"NR14 3UZ\"}");
-        FilingReceived received = createFilingReceived(transaction);
+        address.setPostalCode("NR14 3UZ");
+        when(unmarshaller.unmarshallAddress(transaction.getData())).thenReturn(address);
 
         FilingProcessed processed = processor.process(received);
         
@@ -90,9 +110,8 @@ public class FilingProcessorImplTest {
     public void processRejectedAddressChPostCode() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
 
-        Transaction transaction = new Transaction();
-        transaction.setData("{\"postal_code\":\"CF14 3UZ\"}");
-        FilingReceived received = createFilingReceived(transaction);
+        address.setPostalCode("CF14 3UZ");
+        when(unmarshaller.unmarshallAddress(transaction.getData())).thenReturn(address);
 
         FilingProcessed processed = processor.process(received);
         
@@ -115,10 +134,8 @@ public class FilingProcessorImplTest {
     @Test
     public void processInvalidTransactionData() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
-        
-        Transaction transaction = new Transaction();
-        transaction.setData("invalid data");
-        FilingReceived received = createFilingReceived(transaction);
+
+        when(unmarshaller.unmarshallAddress(transaction.getData())).thenThrow(IOException.class);
 
         assertThrows(FilingProcessingException.class, () -> processor.process(received));
     }

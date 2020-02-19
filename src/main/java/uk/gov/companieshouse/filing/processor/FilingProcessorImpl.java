@@ -39,6 +39,9 @@ public class FilingProcessorImpl implements FilingProcessor {
     @Autowired
     private DateService dateService;
     
+    @Autowired
+    private Unmarshaller unmarshaller;
+    
     @Override
     public FilingProcessed process(FilingReceived filingReceived) throws FilingProcessingException {
         LOG.trace("Processing filing for transaction id = " + filingReceived.getSubmission().getTransactionId());
@@ -100,9 +103,9 @@ public class FilingProcessorImpl implements FilingProcessor {
     private boolean isCompaniesHouseAddress(FilingReceived filingReceived) throws IOException {
         Transaction transaction = filingReceived.getItems().get(0);
         // check transaction for type in future development - not always going to be an address
-        Address address = new JsonUnmarshaller().unmarshallAddress(transaction.getData());
-        return (StringUtils.isNotEmpty(address.getPostalCode())
-                && (address.getPostalCode().toUpperCase().replaceAll("\\s", "").equals(CH_POSTCODE)));
+        Address address = unmarshaller.unmarshallAddress(transaction.getData());
+        return StringUtils.isNotEmpty(address.getPostalCode())
+                && address.getPostalCode().toUpperCase().replaceAll("\\s", "").equals(CH_POSTCODE);
     }
 
 }
