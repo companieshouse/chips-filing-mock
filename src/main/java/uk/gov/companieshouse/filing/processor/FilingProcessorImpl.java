@@ -101,8 +101,8 @@ public class FilingProcessorImpl implements FilingProcessor {
         Transaction transaction = filingReceived.getItems().get(0);
         // check transaction for type in future development - not always going to be an address
         Address address = new JsonUnmarshaller().unmarshallAddress(transaction.getData());
-        return (StringUtils.isNotEmpty(address.getPostalCode())
-                && (address.getPostalCode().toUpperCase().replaceAll("\\s", "").equals(CH_POSTCODE)));
+        return StringUtils.isNotEmpty(address.getPostalCode())
+                && address.getPostalCode().toUpperCase().replaceAll("\\s", "").equals(CH_POSTCODE);
     }
 
 }
