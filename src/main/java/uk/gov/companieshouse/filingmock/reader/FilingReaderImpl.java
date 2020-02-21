@@ -30,18 +30,18 @@ public class FilingReaderImpl implements FilingReader {
     private static final Logger LOG = LoggerFactory.getLogger(Application.APPLICATION_NAME);
 
     @Autowired
-    private String applicationName;
+    String applicationName;
 
     @Value("${kafka.broker.address}")
-    private String brokerAddress;
+    String brokerAddress;
 
     @Value("${kafka.consumer.topic}")
-    private String topicName;
+    String topicName;
 
     @Value("${kafka.consumer.pollTimeout:100}")
-    private long pollTimeout = 100;
+    long pollTimeout = 100;
 
-    private CHConsumer consumer;
+    CHConsumer consumer;
 
     @Autowired
     private DeserializerFactory deserializerFactory;
@@ -54,8 +54,12 @@ public class FilingReaderImpl implements FilingReader {
         config.setPollTimeout(pollTimeout);
         config.setGroupName(applicationName);
 
-        consumer = new CHKafkaConsumerGroup(config);
+        consumer = createConsumer(config);
         consumer.connect();
+    }
+    
+    CHConsumer createConsumer(ConsumerConfig config) {
+        return new CHKafkaConsumerGroup(config);
     }
 
     @PreDestroy
