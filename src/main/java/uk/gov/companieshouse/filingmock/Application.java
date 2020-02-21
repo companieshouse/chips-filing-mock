@@ -40,7 +40,7 @@ public class Application implements CommandLineRunner {
     private long sleepTime = 1000; // ms
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(Application.class).web(WebApplicationType.NONE).run(args);
+        new SpringApplicationBuilder(Application.class).web(WebApplicationType.NONE).run();
     }
 
     @Override
