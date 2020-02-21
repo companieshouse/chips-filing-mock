@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.filing.processor;
+package uk.gov.companieshouse.filingmock.processor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import uk.gov.companieshouse.filing.model.Address;
+import uk.gov.companieshouse.filingmock.model.Address;
 
 public class JsonUnmarshallerTest {
 
