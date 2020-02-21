@@ -2,7 +2,7 @@ CHIPS filing mock
 ==========
 This service mocks the filing backend processing. 
 
-It consumes [FilingReceived](https://github.com/companieshouse/chs-kafka-schemas/blob/master/schemas/filing-received.avsc) objects from a Kafka topic and produces [FilingProcessed](https://github.com/companieshouse/chs-kafka-schemas/blob/master/schemas/filing-processed.avsc) objects to another Kafka topic.
+It consumes [FilingReceived](https://github.com/companieshouse/chs-kafka-schemas/blob/master/schemas/filing-received.avsc) objects from a Kafka topic and calls the [Kafka API](https://github.com/companieshouse/chs-kafka-api) to process the filing.
 
 The filing will automatically be accepted unless it matches one of the pre-determined reject criteria:
 - A change of address transaction using Companies House's post code (CF14 3UZ)
@@ -38,6 +38,4 @@ CONSUMER_SLEEP_MS|Time in milliseconds the service will sleep between polling Ka
 KAFKA_BROKER_ADDR|Address of the Kafka broker|✓||localhost:9092
 KAFKA_CONSUMER_TOPIC|The Kafka topic to consume from|✓||filing-received
 KAFKA_CONSUMER_TIMEOUT_MS|Timeout for consuming messages from Kafka|✓||100
-KAFKA_PRODUCER_TOPIC|The Kafka topic to produce to|✓||filing-processed
-KAFKA_PRODUCER_RETRIES|Number of retries if sending message fails|✓||10
-KAFKA_PRODUCER_MAX_BLOCK_MS|Maximum time in milliseconds the send operation will block|✓||1000
+CHS_KAFKA_API_LOCAL_URL|URL of the Kakfa API service|✓||http://localhost:9000
