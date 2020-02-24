@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,20 +46,10 @@ public class FilingProcessorImplTest {
     @Mock
     private Unmarshaller unmarshaller;
     
-    private Transaction transaction;
-    
-    private FilingReceived received;
-    
     private Address address;
     
     @BeforeEach
     public void setup() {
-        transaction = new Transaction();
-        transaction.setData("data");
-        transaction.setSubmissionId("SUBMISSION-ID");
-        
-        received = createFilingReceived(transaction);
-        
         address = new Address();
     }
     
@@ -66,10 +57,15 @@ public class FilingProcessorImplTest {
     public void processAcceptedAddressWithoutPostCode() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
 
+        Transaction transaction = createTransaction("1");
+        FilingReceived received = createFilingReceived(transaction);
+
         when(unmarshaller.unmarshallAddress(transaction.getData())).thenReturn(address);
 
-        FilingProcessed processed = processor.process(received);
+        List<FilingProcessed> processedResult = processor.process(received);
         
+        assertEquals(1, processedResult.size());
+        FilingProcessed processed = processedResult.get(0);
         assertEquals(received.getApplicationId(), processed.getApplicationId());
         assertEquals(received.getChannelId(), processed.getChannelId());
         assertEquals(received.getPresenter().getLanguage(), processed.getPresenterLanguage());
@@ -88,11 +84,16 @@ public class FilingProcessorImplTest {
     public void processAcceptedAddressNotChPostCode() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
 
+        Transaction transaction = createTransaction("1");
+        FilingReceived received = createFilingReceived(transaction);
+        
         address.setPostalCode("NR14 3UZ");
         when(unmarshaller.unmarshallAddress(transaction.getData())).thenReturn(address);
 
-        FilingProcessed processed = processor.process(received);
+        List<FilingProcessed> processedResult = processor.process(received);
         
+        assertEquals(1, processedResult.size());
+        FilingProcessed processed = processedResult.get(0);
         assertEquals(received.getApplicationId(), processed.getApplicationId());
         assertEquals(received.getChannelId(), processed.getChannelId());
         assertEquals(received.getPresenter().getLanguage(), processed.getPresenterLanguage());
@@ -112,11 +113,16 @@ public class FilingProcessorImplTest {
     public void processRejectedAddressChPostCode() throws Exception {
         when(dateService.now()).thenReturn(INSTANT);
 
+        Transaction transaction = createTransaction("1");
+        FilingReceived received = createFilingReceived(transaction);
+
         address.setPostalCode("CF14 3UZ");
         when(unmarshaller.unmarshallAddress(transaction.getData())).thenReturn(address);
 
-        FilingProcessed processed = processor.process(received);
+        List<FilingProcessed> processedResult = processor.process(received);
         
+        assertEquals(1, processedResult.size());
+        FilingProcessed processed = processedResult.get(0);
         assertEquals(received.getApplicationId(), processed.getApplicationId());
         assertEquals(received.getChannelId(), processed.getChannelId());
         assertEquals(received.getPresenter().getLanguage(), processed.getPresenterLanguage());
@@ -133,9 +139,43 @@ public class FilingProcessorImplTest {
     
     @Test
     public void processInvalidTransactionData() throws Exception {
+        Transaction transaction = createTransaction("1");
+        FilingReceived received = createFilingReceived(transaction);
+
         when(unmarshaller.unmarshallAddress(transaction.getData())).thenThrow(IOException.class);
 
         assertThrows(FilingProcessingException.class, () -> processor.process(received));
+    }
+    
+    @Test
+    public void processFilingMultipleSubmissions() throws Exception {
+        when(dateService.now()).thenReturn(INSTANT);
+        Transaction transaction1 = createTransaction("1");
+        Transaction transaction2 = createTransaction("2");
+        Transaction transaction3 = createTransaction("3");
+        FilingReceived received = createFilingReceived(transaction1, transaction2, transaction3);
+
+        when(unmarshaller.unmarshallAddress(transaction1.getData())).thenReturn(address);
+        when(unmarshaller.unmarshallAddress(transaction2.getData())).thenReturn(new Address());
+        when(unmarshaller.unmarshallAddress(transaction3.getData())).thenReturn(new Address());
+
+        List<FilingProcessed> processedResult = processor.process(received);
+        assertEquals(received.getItems().size(), processedResult.size());
+        for (int i=0; i<received.getItems().size(); i++) {
+            FilingProcessed processed = processedResult.get(i);
+            assertEquals(received.getApplicationId(), processed.getApplicationId());
+            assertEquals(received.getChannelId(), processed.getChannelId());
+            assertEquals(received.getPresenter().getLanguage(), processed.getPresenterLanguage());
+            assertEquals(received.getPresenter().getUserId(), processed.getPresenterId());
+            assertEquals(received.getSubmission().getTransactionId(), processed.getTransactionId());
+            assertEquals(received.getItems().get(i).getSubmissionId(), processed.getSubmissionId());
+            assertEquals(received.getSubmission().getCompanyName(), processed.getCompanyName());
+            assertEquals(received.getSubmission().getCompanyNumber(), processed.getCompanyNumber());
+            assertEquals(DATE_TIME_STRING, processed.getProcessedAt());
+            assertEquals("accepted", processed.getStatus());
+            assertTrue(processed.getRejectionEnglish().isEmpty());
+            assertTrue(processed.getRejectionWelsh().isEmpty());
+        }
     }
 
     private FilingReceived createFilingReceived(Transaction... transactions) {
@@ -146,4 +186,12 @@ public class FilingProcessorImplTest {
         return FilingReceived.newBuilder().setApplicationId("AppId").setChannelId("chs").setAttempt(1)
                 .setPresenter(presenter).setSubmission(submission).setItems(Arrays.asList(transactions)).build();
     }
+    
+    private Transaction createTransaction(String id) {
+        Transaction transaction = new Transaction();
+        transaction.setData("data"+ id);
+        transaction.setSubmissionId(id);
+        return transaction;
+    }
+
 }

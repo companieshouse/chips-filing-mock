@@ -3,7 +3,9 @@ package uk.gov.companieshouse.filingmock.processor;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -37,40 +39,53 @@ public class FilingProcessorImpl implements FilingProcessor {
     private Unmarshaller unmarshaller;
     
     @Override
-    public FilingProcessed process(FilingReceived filingReceived) throws FilingProcessingException {
+    public List<FilingProcessed> process(FilingReceived filingReceived) throws FilingProcessingException {
         LOG.trace("Processing filing for transaction id = " + filingReceived.getSubmission().getTransactionId());
-        FilingProcessed processed = new FilingProcessed();
-        processed.setApplicationId(filingReceived.getApplicationId());
-        processed.setChannelId(filingReceived.getChannelId());
-        processed.setCompanyName(filingReceived.getSubmission().getCompanyName());
-        processed.setCompanyNumber(filingReceived.getSubmission().getCompanyNumber());
-        processed.setPresenterLanguage(filingReceived.getPresenter().getLanguage());
-        processed.setPresenterId(filingReceived.getPresenter().getUserId());
-        processed.setTransactionId(filingReceived.getSubmission().getTransactionId());
-        processed.setSubmissionId(filingReceived.getItems().get(0).getSubmissionId()); // get first item
+        List<FilingProcessed> processedList = new ArrayList<>();
         
-        try {
-            if (isCompaniesHouseAddress(filingReceived)) {
-                processed.setStatus(REJECTED);
-                processed.addRejection(CH_POSTCODE_ENGLISH_REJECT, CH_POSTCODE_WELSH_REJECT);
-            } else {
-                processed.setStatus(ACCEPTED);
+        for (Transaction transaction : filingReceived.getItems()) {
+            FilingProcessed processed = new FilingProcessed();
+            processed.setApplicationId(filingReceived.getApplicationId());
+            processed.setChannelId(filingReceived.getChannelId());
+            processed.setCompanyName(filingReceived.getSubmission().getCompanyName());
+            processed.setCompanyNumber(filingReceived.getSubmission().getCompanyNumber());
+            processed.setPresenterLanguage(filingReceived.getPresenter().getLanguage());
+            processed.setPresenterId(filingReceived.getPresenter().getUserId());
+            processed.setTransactionId(filingReceived.getSubmission().getTransactionId());
+            processed.setSubmissionId(transaction.getSubmissionId());
+            
+            try {
+                if (isCompaniesHouseAddress(transaction)) {
+                    processed.setStatus(REJECTED);
+                    processed.addRejection(CH_POSTCODE_ENGLISH_REJECT, CH_POSTCODE_WELSH_REJECT);
+                } else {
+                    processed.setStatus(ACCEPTED);
+                }
+            } catch (IOException e) {
+                throw new FilingProcessingException(filingReceived, e);
             }
-        } catch (IOException e) {
-            throw new FilingProcessingException(filingReceived, e);
+            String formattedDate = DateTimeFormatter.ISO_INSTANT.format(dateService.now().truncatedTo(ChronoUnit.SECONDS));
+            processed.setProcessedAt(formattedDate);
+            
+            processedList.add(processed);
+            
+            Map<String, Object> loggedData = new HashMap<>();
+            loggedData.put("transaction id", processed.getTransactionId());
+            loggedData.put("submission id", processed.getSubmissionId());
+            loggedData.put("status", processed.getStatus());
+            LOG.trace("Submission processed successfully", loggedData);
         }
-        String formattedDate = DateTimeFormatter.ISO_INSTANT.format(dateService.now().truncatedTo(ChronoUnit.SECONDS));
-        processed.setProcessedAt(formattedDate);
         
         Map<String, Object> loggedData = new HashMap<>();
         loggedData.put("transaction id", filingReceived.getSubmission().getTransactionId());
-        loggedData.put("status", processed.getStatus());
+        loggedData.put("total submissions", processedList.size());
+        loggedData.put("accepted submission(s)", processedList.stream().filter(p -> ACCEPTED.equals(p.getStatus())).count());
+        loggedData.put("rejected submission(s)", processedList.stream().filter(p -> REJECTED.equals(p.getStatus())).count());
         LOG.info("Filing processed successfully", loggedData);
-        return processed;
+        return processedList;
     }
 
-    private boolean isCompaniesHouseAddress(FilingReceived filingReceived) throws IOException {
-        Transaction transaction = filingReceived.getItems().get(0);
+    private boolean isCompaniesHouseAddress(Transaction transaction) throws IOException {
         // check transaction for type in future development - not always going to be an address
         Address address = unmarshaller.unmarshallAddress(transaction.getData());
         return StringUtils.isNotEmpty(address.getPostalCode())
