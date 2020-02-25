@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.filingmock.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -21,17 +19,6 @@ public class FilingProcessed {
 
         @JsonProperty(value = "language")
         String language;
-    }
-
-    @JsonInclude(Include.NON_NULL)
-    static class Rejection {
-        @JsonProperty(value = "english_reasons")
-        @JsonInclude(Include.NON_EMPTY)
-        List<String> english = new ArrayList<>();
-
-        @JsonProperty(value = "welsh_reasons")
-        @JsonInclude(Include.NON_EMPTY)
-        List<String> welsh = new ArrayList<>();
     }
 
     @JsonProperty(value = "transaction_id")
@@ -59,7 +46,7 @@ public class FilingProcessed {
     private String processedAt;
 
     @JsonProperty(value = "status")
-    private String status;
+    private Status status;
 
     @JsonProperty(value = "rejection")
     private Rejection rejection;
@@ -142,28 +129,20 @@ public class FilingProcessed {
         this.processedAt = processedAt;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     
-    public List<String> getRejectionEnglish() {
-        return rejection != null ? Collections.unmodifiableList(rejection.english) : Collections.emptyList();
+    public Rejection getRejection() {
+        return this.rejection;
     }
     
-    public List<String> getRejectionWelsh() {
-        return rejection != null ? Collections.unmodifiableList(rejection.welsh) : Collections.emptyList();
-    }
-    
-    public void addRejection(String english, String welsh) {
-        if (rejection == null) {
-            rejection = new Rejection();
-        }
-        rejection.english.add(english);
-        rejection.welsh.add(welsh);
+    public void setRejection(Rejection rejection) {
+        this.rejection = rejection;
     }
 
 }
