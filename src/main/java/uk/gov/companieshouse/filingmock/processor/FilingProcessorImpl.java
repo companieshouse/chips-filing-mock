@@ -40,7 +40,9 @@ public class FilingProcessorImpl implements FilingProcessor {
     
     @Override
     public List<FilingProcessed> process(FilingReceived filingReceived) throws FilingProcessingException {
-        LOG.trace("Processing filing for transaction id = " + filingReceived.getSubmission().getTransactionId());
+        Map<String, Object> loggedData = new HashMap<>();
+        loggedData.put("transaction id", filingReceived.getSubmission().getTransactionId());
+        LOG.trace("Start of filing processing", loggedData);
         List<FilingProcessed> processedList = new ArrayList<>();
         
         for (Transaction transaction : filingReceived.getItems()) {
@@ -69,15 +71,13 @@ public class FilingProcessorImpl implements FilingProcessor {
             
             processedList.add(processed);
             
-            Map<String, Object> loggedData = new HashMap<>();
-            loggedData.put("transaction id", processed.getTransactionId());
-            loggedData.put("submission id", processed.getSubmissionId());
-            loggedData.put("status", processed.getStatus());
-            LOG.trace("Submission processed successfully", loggedData);
+            Map<String, Object> submissionLoggedData = new HashMap<>();
+            submissionLoggedData.put("transaction id", processed.getTransactionId());
+            submissionLoggedData.put("submission id", processed.getSubmissionId());
+            submissionLoggedData.put("status", processed.getStatus());
+            LOG.trace("Submission processed successfully", submissionLoggedData);
         }
         
-        Map<String, Object> loggedData = new HashMap<>();
-        loggedData.put("transaction id", filingReceived.getSubmission().getTransactionId());
         loggedData.put("total submissions", processedList.size());
         loggedData.put("accepted submission(s)", processedList.stream().filter(p -> ACCEPTED.equals(p.getStatus())).count());
         loggedData.put("rejected submission(s)", processedList.stream().filter(p -> REJECTED.equals(p.getStatus())).count());
