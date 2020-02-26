@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.filingmock;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -53,10 +55,11 @@ public class Application implements CommandLineRunner {
     }
 
     protected void processFilings() {
-        reader.read().stream().map(this::processFiling).filter(Objects::nonNull).forEach(this::writeFiling);
+        reader.read().stream().map(this::processFiling).flatMap(Collection::stream).filter(Objects::nonNull)
+                .forEach(this::writeFiling);
     }
 
-    private FilingProcessed processFiling(FilingReceived received) {
+    private Collection<FilingProcessed> processFiling(FilingReceived received) {
         Map<String, Object> data = new HashMap<>();
         if (received.getSubmission() != null) {
             data.put("transaction id", received.getSubmission().getTransactionId());
@@ -67,7 +70,7 @@ public class Application implements CommandLineRunner {
             return processor.process(received);
         } catch (FilingProcessingException e) {
             LOG.error("Failure processing filing", e, data);
-            return null;
+            return Collections.emptyList();
         }
     }
 

@@ -61,14 +61,16 @@ public class ApplicationTest {
 
         FilingProcessed processed1 = createFilingProcessed(received1.getApplicationId());
         FilingProcessed processed2 = createFilingProcessed(received2.getApplicationId());
+        FilingProcessed processed3 = createFilingProcessed(received2.getApplicationId());
 
-        when(processor.process(received1)).thenReturn(processed1);
-        when(processor.process(received2)).thenReturn(processed2);
+        when(processor.process(received1)).thenReturn(Arrays.asList(processed1));
+        when(processor.process(received2)).thenReturn(Arrays.asList(processed2, processed3));
 
         app.processFilings();
 
         verify(writer).write(processed1);
         verify(writer).write(processed2);
+        verify(writer).write(processed3);
         verifyNoMoreInteractions(writer);
     }
 
@@ -80,14 +82,16 @@ public class ApplicationTest {
 
         when(reader.read()).thenReturn(filingsReceived);
 
+        FilingProcessed processed1 = createFilingProcessed(received1.getApplicationId());
         FilingProcessed processed2 = createFilingProcessed(received2.getApplicationId());
 
         when(processor.process(received1)).thenThrow(FilingProcessingException.class);
-        when(processor.process(received2)).thenReturn(processed2);
+        when(processor.process(received2)).thenReturn(Arrays.asList(processed1, processed2));
 
         app.processFilings();
 
         // Verify it still writes subsequent filings
+        verify(writer).write(processed1);
         verify(writer).write(processed2);
         verifyNoMoreInteractions(writer);
     }
@@ -102,9 +106,10 @@ public class ApplicationTest {
 
         FilingProcessed processed1 = createFilingProcessed(received1.getApplicationId());
         FilingProcessed processed2 = createFilingProcessed(received2.getApplicationId());
+        FilingProcessed processed3 = createFilingProcessed(received2.getApplicationId());
 
-        when(processor.process(received1)).thenReturn(processed1);
-        when(processor.process(received2)).thenReturn(processed2);
+        when(processor.process(received1)).thenReturn(Arrays.asList(processed1, processed2));
+        when(processor.process(received2)).thenReturn(Arrays.asList(processed3));
         
         when(writer.write(processed1)).thenThrow(FilingWriterException.class);
 
@@ -112,6 +117,7 @@ public class ApplicationTest {
 
         // Verify it still writes subsequent filings
         verify(writer).write(processed2);
+        verify(writer).write(processed3);
         verifyNoMoreInteractions(writer);
     }
 
