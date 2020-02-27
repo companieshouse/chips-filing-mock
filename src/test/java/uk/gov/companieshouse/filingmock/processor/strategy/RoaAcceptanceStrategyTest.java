@@ -42,16 +42,36 @@ public class RoaAcceptanceStrategyTest {
         assertEquals(Status.ACCEPTED, filingStatus.getStatus());
         assertNull(filingStatus.getRejection());
     }
-
+    
     @Test
-    void rejectChPostcode() throws Exception {
-        transaction.setData("{\"postal_code\":\"cf14  3UZ\"}");
+    public void rejectChPostcodeWales() throws Exception {
+        postCodeTest("cf14 3UZ");
+    }
+    
+    @Test
+    public void rejectChPostcodeEngland() throws Exception {
+        postCodeTest("SW1h  9EX");
+    }
+    
+    @Test
+    public void rejectChPostcodeNorthernIreland() throws Exception {
+        postCodeTest("BT2   8bg");
+    }
+    
+    @Test
+    public void rejectChPostcodeScotland() throws Exception {
+        postCodeTest("Eh39fF");
+    }
+
+    private void postCodeTest(String postCode) throws Exception {
+        transaction.setData("{\"postal_code\":\""+ postCode +"\"}");
         FilingStatus filingStatus = strategy.accept(transaction);
         assertEquals(Status.REJECTED, filingStatus.getStatus());
         assertEquals(1, filingStatus.getRejection().getEnglishReasons().size());
         assertTrue(filingStatus.getRejection().getEnglishReasons().contains(ENGLISH_REJECT));
         assertEquals(1, filingStatus.getRejection().getWelshReasons().size());
         assertTrue(filingStatus.getRejection().getWelshReasons().contains(WELSH_REJECT));
+        
     }
 
     @Test

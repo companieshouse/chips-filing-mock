@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.filingmock.processor.strategy;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
@@ -23,7 +25,7 @@ public class RoaAcceptanceStrategy implements AcceptanceStrategy {
     private static final ObjectReader ADDRESS_READER = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readerFor(Address.class);
 
-    private static final String CH_POSTCODE = "CF143UZ";
+    private static final List<String> CH_POSTCODE = Arrays.asList("CF143UZ","BT28BG","SW1H9EX","EH39FF");
     private static final String CH_POSTCODE_ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
     private static final String CH_POSTCODE_WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau";
 
@@ -60,7 +62,7 @@ public class RoaAcceptanceStrategy implements AcceptanceStrategy {
      */
     private boolean isValidAddress(Address address) {
         return StringUtils.isEmpty(address.getPostalCode())
-                || !address.getPostalCode().toUpperCase().replaceAll("\\s", "").equals(CH_POSTCODE);
+                || !CH_POSTCODE.contains(address.getPostalCode().toUpperCase().replaceAll("\\s", ""));
     }
 
 }
