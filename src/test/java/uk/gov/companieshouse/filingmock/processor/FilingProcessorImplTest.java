@@ -110,13 +110,31 @@ public class FilingProcessorImplTest {
     }
     
     @Test
-    public void processRejectedAddressChPostCode() throws Exception {
-        when(dateService.now()).thenReturn(INSTANT);
-
-        Transaction transaction = createTransaction("1");
+    public void processRejectedAddressChPostCodeWales() throws Exception {
+    	postCodeTest("CF14 3UZ");
+    }
+    
+    @Test
+    public void processRejectedAddressChPostCodeEngland() throws Exception {
+    	postCodeTest("SW1H 9EX");
+    }
+    
+    @Test
+    public void processRejectedAddressChPostCodeNorthernIreland() throws Exception {
+    	postCodeTest("BT2 8BG");
+    }
+    
+    @Test
+    public void processRejectedAddressChPostCodeScotland() throws Exception {
+    	postCodeTest("EH3 9FF");
+    }
+    
+    private void postCodeTest(String postCode) throws Exception {
+    	when(dateService.now()).thenReturn(INSTANT);
+    	Transaction transaction = createTransaction("1");
         FilingReceived received = createFilingReceived(transaction);
-
-        address.setPostalCode("CF14 3UZ");
+        
+        address.setPostalCode(postCode);
         when(unmarshaller.unmarshallAddress(transaction.getData())).thenReturn(address);
 
         List<FilingProcessed> processedResult = processor.process(received);

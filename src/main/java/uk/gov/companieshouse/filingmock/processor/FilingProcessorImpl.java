@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class FilingProcessorImpl implements FilingProcessor {
     
     private static final String ACCEPTED = "accepted";
     private static final String REJECTED = "rejected";
-    private static final String CH_POSTCODE = "CF143UZ";
+    private static final List<String> CH_POSTCODE = Arrays.asList("CF143UZ","BT28BG","SW1H9EX","EH39FF");
     private static final String CH_POSTCODE_ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
     private static final String CH_POSTCODE_WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau";
 
@@ -89,7 +90,7 @@ public class FilingProcessorImpl implements FilingProcessor {
         // check transaction for type in future development - not always going to be an address
         Address address = unmarshaller.unmarshallAddress(transaction.getData());
         return StringUtils.isNotEmpty(address.getPostalCode())
-                && address.getPostalCode().toUpperCase().replaceAll("\\s", "").equals(CH_POSTCODE);
+        		&& CH_POSTCODE.contains(address.getPostalCode().toUpperCase().replaceAll("\\s", ""));
     }
 
 }
