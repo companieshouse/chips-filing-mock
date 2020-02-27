@@ -45,22 +45,22 @@ public class RoaAcceptanceStrategyTest {
     
     @Test
     public void rejectChPostcodeWales() throws Exception {
-        postCodeTest("CF14 3UZ");
+        postCodeTest("cf14 3UZ");
     }
     
     @Test
     public void rejectChPostcodeEngland() throws Exception {
-        postCodeTest("SW1H 9EX");
+        postCodeTest("SW1h  9EX");
     }
     
     @Test
     public void rejectChPostcodeNorthernIreland() throws Exception {
-        postCodeTest("BT2 8BG");
+        postCodeTest("BT2   8bg");
     }
     
     @Test
     public void rejectChPostcodeScotland() throws Exception {
-        postCodeTest("EH3 9FF");
+        postCodeTest("Eh39fF");
     }
 
     private void postCodeTest(String postCode) throws Exception {
