@@ -1,5 +1,5 @@
 artifact_name       := chips-filing-mock
-version             := "unversioned"
+version             := unversioned
 
 .PHONY: all
 all: clean build test package
