@@ -5,7 +5,7 @@ This service mocks the filing backend processing.
 It consumes [FilingReceived](https://github.com/companieshouse/chs-kafka-schemas/blob/master/schemas/filing-received.avsc) objects from a Kafka topic and calls the [Kafka API](https://github.com/companieshouse/chs-kafka-api) to process the filing.
 
 The filing will automatically be accepted unless it matches one of the pre-determined reject criteria:
-- A change of address transaction using Companies House's post code (CF14 3UZ), (BT28BG), (SW1H9EX), (EH39FF).
+- A change of address transaction using one of the Companies House's post codes (CF14 3UZ, BT28BG, SW1H9EX, EH39FF).
 
 Requirements
 ------------
