@@ -49,3 +49,11 @@ sonar:
 .PHONY: sonar-pr-analysis
 sonar-pr-analysis:
 	mvn sonar:sonar -P sonar-pr-analysis
+
+.PHONY: docker-build
+docker-build:
+	docker build -t $(artifact_name):$(version) .
+
+.PHONY: docker-run
+docker-run:
+	docker run -i -t --env-file=local_env $(artifact_name):$(version)
