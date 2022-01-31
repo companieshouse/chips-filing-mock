@@ -18,7 +18,8 @@ public class AcceptanceStrategyFactory {
 
         if ("registered-office-address".equals(submissionType)) {
             return ROA;
-        } else if ("insolvency".equals(submissionType)) {
+            // There are multiple insolvency types e.g. insolvency#600 but all will start with "insolvency," and should use the same strategy
+        } else if (submissionType.contains("insolvency")) {
             return INSOLVENCY;
         }
         return ALWAYS_ACCEPT;
