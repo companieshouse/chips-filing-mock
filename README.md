@@ -40,4 +40,4 @@ The supported environmental variables have been categorised by use case and are 
 | KAFKA_BROKER_ADDR         | Address of the Kafka broker                                       | ✓         || localhost:9092        |     |
 | KAFKA_CONSUMER_TOPIC      | The Kafka topic to consume from                                   | ✓         || filing-received       |     |
 | KAFKA_CONSUMER_TIMEOUT_MS | Timeout for consuming messages from Kafka                         | ✓         || 100                   |     |
-| CHS_KAFKA_API_LOCAL_URL   | URL of the Kakfa API service                                      | ✓         || http://localhost:9000 |     |
+| CHS_KAFKA_API_LOCAL_URL   | URL of the Kafka API service                                      | ✓         || http://localhost:9000 |     |
