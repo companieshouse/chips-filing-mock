@@ -27,17 +27,17 @@ Getting started
 The supported environmental variables have been categorised by use case and are as follows.
 
 ### Code Analysis Variables
-Name                   | Description                                                                                                                               | Mandatory | Default | Example
----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | ------------------
-CODE_ANALYSIS_HOST_URL | The host URL of the code analysis server. See [here](https://docs.sonarqube.org/display/SONAR/Analysis+Parameters)                        | ✓         |         | http://HOST:PORT
-CODE_ANALYSIS_LOGIN    | The analysis server account to use when analysing or publishing. See [here](https://docs.sonarqube.org/display/SONAR/Analysis+Parameters) | ✓         |         | login
-CODE_ANALYSIS_PASSWORD | The analysis server account password. See [here](https://docs.sonarqube.org/display/SONAR/Analysis+Parameters)                            | ✓         |         | password
+| Name                   | Description                                                                                                                               | Mandatory | Default | Example          |
+|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|-----------|---------|------------------|
+| CODE_ANALYSIS_HOST_URL | The host URL of the code analysis server. See [here](https://docs.sonarqube.org/display/SONAR/Analysis+Parameters)                        | ✓         |         | http://HOST:PORT |
+| CODE_ANALYSIS_LOGIN    | The analysis server account to use when analysing or publishing. See [here](https://docs.sonarqube.org/display/SONAR/Analysis+Parameters) | ✓         |         | login            |
+| CODE_ANALYSIS_PASSWORD | The analysis server account password. See [here](https://docs.sonarqube.org/display/SONAR/Analysis+Parameters)                            | ✓         |         | password         |
 
 ### Deployment Variables
-Name| Description| Mandatory | Default | Example
---- | ---------- | --------- | ------- | --------
-CONSUMER_SLEEP_MS|Time in milliseconds the service will sleep between polling Kafka|✓||10000
-KAFKA_BROKER_ADDR|Address of the Kafka broker|✓||localhost:9092
-KAFKA_CONSUMER_TOPIC|The Kafka topic to consume from|✓||filing-received
-KAFKA_CONSUMER_TIMEOUT_MS|Timeout for consuming messages from Kafka|✓||100
-CHS_KAFKA_API_LOCAL_URL|URL of the Kakfa API service|✓||http://localhost:9000
+| Name                      | Description                                                       | Mandatory | Default               | Example |
+|---------------------------|-------------------------------------------------------------------|-----------|-----------------------|---------|
+| CONSUMER_SLEEP_MS         | Time in milliseconds the service will sleep between polling Kafka | ✓         || 10000                 |     |
+| KAFKA_BROKER_ADDR         | Address of the Kafka broker                                       | ✓         || localhost:9092        |     |
+| KAFKA_CONSUMER_TOPIC      | The Kafka topic to consume from                                   | ✓         || filing-received       |     |
+| KAFKA_CONSUMER_TIMEOUT_MS | Timeout for consuming messages from Kafka                         | ✓         || 100                   |     |
+| CHS_KAFKA_API_LOCAL_URL   | URL of the Kakfa API service                                      | ✓         || http://localhost:9000 |     |
