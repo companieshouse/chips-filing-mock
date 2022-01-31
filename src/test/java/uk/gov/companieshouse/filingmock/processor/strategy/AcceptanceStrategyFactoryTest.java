@@ -21,9 +21,9 @@ public class AcceptanceStrategyFactoryTest {
     }
 
     @Test
-    public void getInsolvencyStrategy() {
+    public void get600Strategy() {
         Transaction submission = new Transaction();
-        submission.setKind("insolvency");
+        submission.setKind("insolvency#600");
         AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
         assertTrue(strategy instanceof InsolvencyAcceptanceStrategy);
     }

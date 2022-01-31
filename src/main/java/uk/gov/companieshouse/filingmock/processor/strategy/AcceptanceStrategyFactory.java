@@ -14,7 +14,8 @@ public class AcceptanceStrategyFactory {
     }
 
     public static AcceptanceStrategy getStrategy(Transaction submission) {
-        String submissionType = submission.getKind();
+        // If getKind() returns null, methods like .contains would generate nullPointer exception, so treat as empty string instead
+        String submissionType = (submission.getKind() != null) ? submission.getKind() : "";
 
         if ("registered-office-address".equals(submissionType)) {
             return ROA;
