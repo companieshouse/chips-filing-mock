@@ -16,14 +16,12 @@ public class AcceptanceStrategyFactory {
     public static AcceptanceStrategy getStrategy(Transaction submission) {
         String submissionType = submission.getKind();
 
-        switch(submissionType) {
-            case "registered-office-address":
-                return ROA;
-            case "insolvency" :
-                return INSOLVENCY;
-            default :
-                return ALWAYS_ACCEPT;
+        if ("registered-office-address".equals(submissionType)) {
+            return ROA;
+        } else if ("insolvency".equals(submissionType)) {
+            return INSOLVENCY;
         }
+        return ALWAYS_ACCEPT;
 
     }
 
