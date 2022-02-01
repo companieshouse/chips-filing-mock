@@ -25,7 +25,7 @@ public class InsolvencyAcceptanceStrategyTest {
 
     @Test
     void acceptValidPostcode() throws Exception {
-        transaction.setData("{\"practitioners\":[{\"address\":{\"postal_code\":\" M8 8EQ \"}}]}");
+        transaction.setData("{\"practitioners\":[{\"Address\":{\"PostalCode\":\" M8 8EQ \"}}]}");
         FilingStatus filingStatus = strategy.accept(transaction);
         assertEquals(Status.ACCEPTED, filingStatus.getStatus());
         assertNull(filingStatus.getRejection());
@@ -60,7 +60,7 @@ public class InsolvencyAcceptanceStrategyTest {
     }
 
     private void postCodeTest(String postCode) throws Exception {
-        transaction.setData("{\"practitioners\":[{\"address\":{\"postal_code\":\"" + postCode + "\"}}]}");
+        transaction.setData("{\"practitioners\":[{\"Address\":{\"PostalCode\":\"" + postCode + "\"}}]}");
         FilingStatus filingStatus = strategy.accept(transaction);
         assertEquals(Status.REJECTED, filingStatus.getStatus());
         assertEquals(1, filingStatus.getRejection().getEnglishReasons().size());

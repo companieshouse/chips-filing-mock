@@ -25,6 +25,17 @@ public class InsolvencyPractitioners {
 }
 
 class PractitionerWrapper {
-    @JsonProperty("address")
-    Address address;
+    // note that existing Address class was used for ROA, but ROA used snake_case in Kafka whereas Insolvency API is using PascalCase
+    @JsonProperty("Address")
+    IPAddressTruncated address;
+}
+
+class IPAddressTruncated {
+    @JsonProperty("PostalCode")
+    private String postalCode;
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
 }
