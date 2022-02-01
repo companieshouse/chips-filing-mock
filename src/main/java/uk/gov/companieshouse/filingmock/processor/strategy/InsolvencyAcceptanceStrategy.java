@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.Address;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
+import uk.gov.companieshouse.filingmock.model.InsolvencyPractitioners;
 import uk.gov.companieshouse.filingmock.model.Status;
 
 import java.io.IOException;
@@ -20,8 +21,8 @@ import java.util.List;
  */
 @Component
 public class InsolvencyAcceptanceStrategy implements AcceptanceStrategy {
-    private static final ObjectReader ADDRESS_READER = new ObjectMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readerFor(Address.class);
+    private static final ObjectReader PRACTITIONERS_READER = new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readerFor(InsolvencyPractitioners.class);
 
     private static final List<String> CH_POSTCODE = Arrays.asList("CF143UZ","BT28BG","SW1H9EX","EH39FF");
     private static final String CH_POSTCODE_ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
@@ -35,8 +36,8 @@ public class InsolvencyAcceptanceStrategy implements AcceptanceStrategy {
     public FilingStatus accept(Transaction transaction) throws AcceptanceStrategyException {
         FilingStatus filingStatus = new FilingStatus();
 
-        Address address = getAddress(transaction);
-        if (!isValidAddress(address)) {
+        InsolvencyPractitioners practitioners = getPractitioners(transaction);
+        if (!practitionerOneHasValidPostcode(practitioners)) {
             filingStatus.setStatus(Status.REJECTED);
             filingStatus.addRejection(CH_POSTCODE_ENGLISH_REJECT, CH_POSTCODE_WELSH_REJECT);
         }
@@ -44,9 +45,9 @@ public class InsolvencyAcceptanceStrategy implements AcceptanceStrategy {
         return filingStatus;
     }
 
-    private Address getAddress(Transaction transaction) throws AcceptanceStrategyException {
+    private InsolvencyPractitioners getPractitioners(Transaction transaction) throws AcceptanceStrategyException {
         try {
-            return ADDRESS_READER.readValue(transaction.getData());
+            return PRACTITIONERS_READER.readValue(transaction.getData());
         } catch (IOException e) {
             throw new AcceptanceStrategyException(e);
         }
@@ -58,9 +59,12 @@ public class InsolvencyAcceptanceStrategy implements AcceptanceStrategy {
      * @param address the address extracted from transaction
      * @return a boolean representing whether address uses CH post code
      */
-    private boolean isValidAddress(Address address) {
-        return StringUtils.isEmpty(address.getPostalCode())
-                || !CH_POSTCODE.contains(address.getPostalCode().toUpperCase().replaceAll("\\s", ""));
+    private boolean practitionerOneHasValidPostcode(InsolvencyPractitioners practitioners) {
+        if(practitioners.getPractitionerOnePostcode() != null) {
+            return !CH_POSTCODE.contains(practitioners.getPractitionerOnePostcode().toUpperCase().replaceAll("\\s", ""));
+        }
+
+        return true;
     }
 
 }
