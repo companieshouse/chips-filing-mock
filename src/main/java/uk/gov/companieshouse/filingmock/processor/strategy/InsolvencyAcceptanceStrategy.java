@@ -56,7 +56,7 @@ public class InsolvencyAcceptanceStrategy implements AcceptanceStrategy {
     /**
      * An address is always valid unless it uses Companies House's post code
      * 
-     * @param address the address extracted from transaction
+     * @param practitioners all insolvency practitioners extracted from transaction
      * @return a boolean representing whether address uses CH post code
      */
     private boolean practitionerOneHasValidPostcode(InsolvencyPractitioners practitioners) {
