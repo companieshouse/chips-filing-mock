@@ -19,6 +19,14 @@ public class AcceptanceStrategyFactoryTest {
         AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
         assertTrue(strategy instanceof RoaAcceptanceStrategy);
     }
+
+    @Test
+    public void get600Strategy() {
+        Transaction submission = new Transaction();
+        submission.setKind("insolvency#600");
+        AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
+        assertTrue(strategy instanceof InsolvencyAcceptanceStrategy);
+    }
     
     @Test
     public void getDefaultStrategyUnknownType() throws Exception {
