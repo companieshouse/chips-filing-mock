@@ -24,6 +24,7 @@ public class InsolvencyPractitioners {
 
 }
 
+// although this wraps only address currently, it could be expanded to cover other fields - hence the generic name
 class PractitionerWrapper {
     // note that existing Address class was used for ROA, but ROA used snake_case in Kafka whereas Insolvency API is using PascalCase
     @JsonProperty("Address")

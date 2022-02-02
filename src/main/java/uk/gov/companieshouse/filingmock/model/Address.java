@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
- * Class to hold the data for the address objects
+ * Class to hold the data for ROA address objects
  */
 
 public class Address {
