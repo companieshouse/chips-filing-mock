@@ -10,6 +10,13 @@ import java.time.LocalDate;
 public class PscCommon {
     private LocalDate ceasedOn;
 
+    public PscCommon() {
+    }
+
+    public PscCommon(LocalDate ceasedOn) {
+        this.ceasedOn = ceasedOn;
+    }
+
     /**
      * @return The ceased on date
      */
