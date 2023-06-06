@@ -21,6 +21,14 @@ public class AcceptanceStrategyFactoryTest {
     }
 
     @Test
+    public void getPscStrategy() {
+        Transaction submission = new Transaction();
+        submission.setKind("cessation");
+        AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
+        assertTrue(strategy instanceof PscAcceptanceStrategy);
+    }
+
+    @Test
     public void get600Strategy() {
         Transaction submission = new Transaction();
         submission.setKind("insolvency#600");
