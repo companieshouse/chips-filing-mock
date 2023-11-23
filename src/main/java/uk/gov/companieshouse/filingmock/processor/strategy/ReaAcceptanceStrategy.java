@@ -25,9 +25,9 @@ public class ReaAcceptanceStrategy implements AcceptanceStrategy {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^.+@.+\\..+$");
 
-    // TODO get the email rejection texts
-    private static final String CH_REA_ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
-    private static final String CH_REA_WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau";
+    // FIXME rejection is not required for the REA strategy
+    private static final String CH_REA_ENGLISH_REJECT = "The email address is in an incorrect format. You must use the correct format, like name@example.com";
+    private static final String CH_REA_WELSH_REJECT = "Mae'r cyfeiriad e-bost mewn fformat anghywir. Rhaid i chi ddefnyddio'r fformat cywir, fel name@example.com";
 
     private static RegisteredEmailAddress getRegisteredEmailAddress(Transaction transaction) throws AcceptanceStrategyException {
         try {
