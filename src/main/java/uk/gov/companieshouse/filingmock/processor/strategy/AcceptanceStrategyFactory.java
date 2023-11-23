@@ -6,6 +6,7 @@ import uk.gov.companieshouse.filingmock.model.FilingStatus;
 public class AcceptanceStrategyFactory {
 
     private static final AcceptanceStrategy ROA = new RoaAcceptanceStrategy();
+    private static final AcceptanceStrategy REA = new ReaAcceptanceStrategy();
     private static final AcceptanceStrategy INSOLVENCY = new InsolvencyAcceptanceStrategy();
     private static final AcceptanceStrategy CESSATION = new PscAcceptanceStrategy();
     private static final AcceptanceStrategy ALWAYS_ACCEPT = t -> new FilingStatus();
@@ -20,14 +21,15 @@ public class AcceptanceStrategyFactory {
 
         if ("registered-office-address".equals(submissionType)) {
             return ROA;
-            // There are multiple insolvency types e.g. insolvency#600 but all will start with "insolvency," and should use the same strategy
-        } else if (submissionType.contains("insolvency")) {
+        } else if ("registered-email-address".equals(submissionType)) {
+            return REA;
+        } else if (submissionType.contains("insolvency")) /* There are multiple insolvency types e.g. insolvency#600 but all will start with "insolvency," and should use the same strategy */ {
             return INSOLVENCY;
         } else if (submissionType.contains("cessation")) {
             return CESSATION;
         }
-        return ALWAYS_ACCEPT;
 
+        return ALWAYS_ACCEPT;
     }
 
 }
