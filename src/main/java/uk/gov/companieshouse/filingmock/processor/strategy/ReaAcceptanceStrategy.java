@@ -1,10 +1,8 @@
 package uk.gov.companieshouse.filingmock.processor.strategy;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -12,11 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
 import uk.gov.companieshouse.filing.received.Transaction;
-import uk.gov.companieshouse.filingmock.Application;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
-import uk.gov.companieshouse.filingmock.model.RegisteredEmailAddress;
-import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.logging.LoggerFactory;
+import uk.gov.companieshouse.filingmock.model.ConfirmationStatementFilingData;
+import uk.gov.companieshouse.filingmock.model.Status;
 
 /**
  * Rejects the filing if the provided email does not match the Companies House regex (from registered-emil-address-api).
@@ -25,39 +21,37 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 @Component
 public class ReaAcceptanceStrategy implements AcceptanceStrategy {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Application.APPLICATION_NAME);
+    private static final ObjectReader READER = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readerFor(ConfirmationStatementFilingData.class);
 
-    private static final ObjectReader EMAIL_READER = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readerFor(RegisteredEmailAddress.class);
+    private static final String CH_EMAIL = "@companieshouse.gov.uk";
 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^.+@.+\\..+$");
+    static final String CH_EMAIL_ENGLISH_REJECT = "The email you have supplied cannot be Companies House email";
+    static final String CH_EMAIL_WELSH_REJECT = "Ni all yr e-bost a ddarparwyd gennych fod yn e-bost gan Dŷ'r Cwmnïau";
 
-    private static RegisteredEmailAddress getRegisteredEmailAddress(Transaction transaction) throws AcceptanceStrategyException {
+    private static ConfirmationStatementFilingData getFilingData(Transaction transaction) throws AcceptanceStrategyException {
         try {
-            return EMAIL_READER.readValue(transaction.getData());
+            return READER.readValue(transaction.getData());
         } catch (IOException e) {
             throw new AcceptanceStrategyException(e);
         }
     }
 
     private static boolean isValidEmail(String email) {
-        if (email == null) {
-            return false;
-        }
-
-        return EMAIL_PATTERN.matcher(email).matches();
+        return StringUtils.isEmpty(email) || !email.contains(CH_EMAIL);
     }
 
     @Override
     public FilingStatus accept(Transaction transaction) throws AcceptanceStrategyException {
-        RegisteredEmailAddress rea = getRegisteredEmailAddress(transaction);
+        FilingStatus filingStatus = new FilingStatus();
 
-        if (!isValidEmail(rea.getRegisteredEmailAddress())) {
-            Map<String, Object> loggedData = new HashMap<>();
-            loggedData.put("registeredEmailAddress", rea.getRegisteredEmailAddress());
-            LOG.debug("The REA does not match regex but this strategy will not reject the filing", loggedData);
+        ConfirmationStatementFilingData data = getFilingData(transaction);
+
+        if (!isValidEmail(data.getRegisteredEmailAddress())) {
+            filingStatus.setStatus(Status.REJECTED);
+            filingStatus.addRejection(CH_EMAIL_ENGLISH_REJECT, CH_EMAIL_WELSH_REJECT);
         }
 
-        return new FilingStatus();
+        return filingStatus;
     }
 
 }

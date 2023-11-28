@@ -3,9 +3,9 @@ package uk.gov.companieshouse.filingmock.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Class to hold the data for RegisteredEmailAddress objects.
+ * Class to hold the data for a Confirmation Statement filing.
  */
-public class RegisteredEmailAddress {
+public class ConfirmationStatementFilingData {
 
     @JsonProperty("trading_on_market")
     private boolean tradingOnMarket;
