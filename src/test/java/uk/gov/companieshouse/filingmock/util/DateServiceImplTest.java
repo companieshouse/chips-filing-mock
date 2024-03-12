@@ -5,15 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
-
-import uk.gov.companieshouse.filingmock.util.DateServiceImpl;
-
-public class DateServiceImplTest {
+ class DateServiceImplTest {
 
     private DateServiceImpl service = new DateServiceImpl();
 
     @Test
-    public void testNow() {
+    void testNow() {
         Instant before = Instant.now();
 
         Instant result = service.now();

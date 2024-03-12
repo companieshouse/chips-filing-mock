@@ -12,7 +12,7 @@ import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
 import uk.gov.companieshouse.filingmock.model.Status;
 
-public class RoaAcceptanceStrategyTest {
+class RoaAcceptanceStrategyTest {
 
     private static final String ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
     private static final String WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau";
@@ -42,24 +42,24 @@ public class RoaAcceptanceStrategyTest {
         assertEquals(Status.ACCEPTED, filingStatus.getStatus());
         assertNull(filingStatus.getRejection());
     }
-    
+
     @Test
-    public void rejectChPostcodeWales() throws Exception {
+    void rejectChPostcodeWales() throws Exception {
         postCodeTest("cf14 3UZ");
     }
-    
+
     @Test
-    public void rejectChPostcodeEngland() throws Exception {
+    void rejectChPostcodeEngland() throws Exception {
         postCodeTest("SW1h  9EX");
     }
-    
+
     @Test
-    public void rejectChPostcodeNorthernIreland() throws Exception {
+    void rejectChPostcodeNorthernIreland() throws Exception {
         postCodeTest("BT2   8bg");
     }
-    
+
     @Test
-    public void rejectChPostcodeScotland() throws Exception {
+    void rejectChPostcodeScotland() throws Exception {
         postCodeTest("Eh39fF");
     }
 

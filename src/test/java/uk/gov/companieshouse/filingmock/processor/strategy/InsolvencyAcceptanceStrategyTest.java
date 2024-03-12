@@ -8,7 +8,7 @@ import uk.gov.companieshouse.filingmock.model.Status;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class InsolvencyAcceptanceStrategyTest {
+class InsolvencyAcceptanceStrategyTest {
 
     private static final String ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
     private static final String WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau";
@@ -40,22 +40,22 @@ public class InsolvencyAcceptanceStrategyTest {
     }
     
     @Test
-    public void rejectChPostcodeWales() throws Exception {
+    void rejectChPostcodeWales() throws Exception {
         postCodeTest("cf14 3UZ");
     }
     
     @Test
-    public void rejectChPostcodeEngland() throws Exception {
+    void rejectChPostcodeEngland() throws Exception {
         postCodeTest("Sw1H   9EX");
     }
     
     @Test
-    public void rejectChPostcodeNorthernIreland() throws Exception {
+    void rejectChPostcodeNorthernIreland() throws Exception {
         postCodeTest("BT2   8bg");
     }
     
     @Test
-    public void rejectChPostcodeScotland() throws Exception {
+    void rejectChPostcodeScotland() throws Exception {
         postCodeTest("Eh39fF");
     }
 
