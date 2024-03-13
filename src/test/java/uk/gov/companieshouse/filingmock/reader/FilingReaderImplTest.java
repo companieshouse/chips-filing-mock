@@ -23,7 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filing.received.SubmissionRecord;
-import uk.gov.companieshouse.filingmock.reader.FilingReaderImpl;
 import uk.gov.companieshouse.kafka.consumer.CHConsumer;
 import uk.gov.companieshouse.kafka.consumer.ConsumerConfig;
 import uk.gov.companieshouse.kafka.deserialization.AvroDeserializer;
@@ -32,7 +31,7 @@ import uk.gov.companieshouse.kafka.exceptions.DeserializationException;
 import uk.gov.companieshouse.kafka.message.Message;
 
 @ExtendWith(MockitoExtension.class)
-public class FilingReaderImplTest {
+class FilingReaderImplTest {
 
     @InjectMocks
     @Spy
@@ -48,7 +47,7 @@ public class FilingReaderImplTest {
     private AvroDeserializer<FilingReceived> deserializer;
     
     @Test
-    public void init() {
+    void init() {
         doReturn(consumer).when(reader).createConsumer(Mockito.any());
         reader.brokerAddress = "kafka address";
         reader.topicName = "filing-received";
@@ -73,7 +72,7 @@ public class FilingReaderImplTest {
     }
 
     @Test
-    public void readNoMessage() {
+    void readNoMessage() {
         List<Message> messages = Collections.emptyList();
         when(consumer.consume()).thenReturn(messages);
 
@@ -83,7 +82,7 @@ public class FilingReaderImplTest {
     }
 
     @Test
-    public void readValidMessages() throws Exception {
+    void readValidMessages() throws Exception {
         when(deserializerFactory.getSpecificRecordDeserializer(FilingReceived.class)).thenReturn(deserializer);
 
         List<Message> messages = new ArrayList<>();
@@ -106,7 +105,7 @@ public class FilingReaderImplTest {
     }
 
     @Test
-    public void readInvalidMessage() throws Exception {
+    void readInvalidMessage() throws Exception {
         when(deserializerFactory.getSpecificRecordDeserializer(FilingReceived.class)).thenReturn(deserializer);
 
         List<Message> messages = new ArrayList<>();

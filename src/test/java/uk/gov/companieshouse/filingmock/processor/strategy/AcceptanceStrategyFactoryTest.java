@@ -10,10 +10,10 @@ import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
 import uk.gov.companieshouse.filingmock.model.Status;
 
-public class AcceptanceStrategyFactoryTest {
+class AcceptanceStrategyFactoryTest {
 
     @Test
-    public void getRoaStrategy() {
+    void getRoaStrategy() {
         Transaction submission = new Transaction();
         submission.setKind("registered-office-address");
         AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
@@ -21,7 +21,7 @@ public class AcceptanceStrategyFactoryTest {
     }
 
     @Test
-    public void getPscStrategy() {
+    void getPscStrategy() {
         Transaction submission = new Transaction();
         submission.setKind("cessation");
         AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
@@ -29,7 +29,7 @@ public class AcceptanceStrategyFactoryTest {
     }
 
     @Test
-    public void get600Strategy() {
+    void get600Strategy() {
         Transaction submission = new Transaction();
         submission.setKind("insolvency#600");
         AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
@@ -37,7 +37,7 @@ public class AcceptanceStrategyFactoryTest {
     }
     
     @Test
-    public void getDefaultStrategyUnknownType() throws Exception {
+    void getDefaultStrategyUnknownType() throws Exception {
         Transaction submission = new Transaction();
         submission.setKind("unknown-transaction-type");
         AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
@@ -48,7 +48,7 @@ public class AcceptanceStrategyFactoryTest {
     }
     
     @Test
-    public void getDefaultStrategyMissingType() throws Exception {
+    void getDefaultStrategyMissingType() throws Exception {
         Transaction submission = new Transaction();
         AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
         // Default strategy is always accept

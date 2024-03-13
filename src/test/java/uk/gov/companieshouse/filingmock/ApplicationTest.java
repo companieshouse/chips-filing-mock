@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filing.received.SubmissionRecord;
-import uk.gov.companieshouse.filingmock.Application;
 import uk.gov.companieshouse.filingmock.model.FilingProcessed;
 import uk.gov.companieshouse.filingmock.processor.FilingProcessingException;
 import uk.gov.companieshouse.filingmock.processor.FilingProcessor;
@@ -26,7 +25,7 @@ import uk.gov.companieshouse.filingmock.writer.FilingWriter;
 import uk.gov.companieshouse.filingmock.writer.FilingWriterException;
 
 @ExtendWith(MockitoExtension.class)
-public class ApplicationTest {
+class ApplicationTest {
 
     @InjectMocks
     private Application app;
@@ -41,7 +40,7 @@ public class ApplicationTest {
     private FilingProcessor processor;
 
     @Test
-    public void processFilingsNoElements() {
+    void processFilingsNoElements() {
         Collection<FilingReceived> filingsReceived = Collections.emptyList();
 
         when(reader.read()).thenReturn(filingsReceived);
@@ -52,7 +51,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void processFilings() throws Exception {
+    void processFilings() throws Exception {
         FilingReceived received1 = createFilingReceived("1");
         FilingReceived received2 = createFilingReceived("2");
         Collection<FilingReceived> filingsReceived = Arrays.asList(received1, received2);
@@ -75,7 +74,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void processFilingsProcessingException() throws Exception {
+    void processFilingsProcessingException() throws Exception {
         FilingReceived received1 = createFilingReceived("1");
         FilingReceived received2 = createFilingReceived("2");
         Collection<FilingReceived> filingsReceived = Arrays.asList(received1, received2);
@@ -95,9 +94,9 @@ public class ApplicationTest {
         verify(writer).write(processed2);
         verifyNoMoreInteractions(writer);
     }
-    
+
     @Test
-    public void processFilingsWritingException() throws Exception {
+    void processFilingsWritingException() throws Exception {
         FilingReceived received1 = createFilingReceived("1");
         FilingReceived received2 = createFilingReceived("2");
         Collection<FilingReceived> filingsReceived = Arrays.asList(received1, received2);
@@ -130,7 +129,7 @@ public class ApplicationTest {
         received.setApplicationId(applicationId);
         return received;
     }
-    
+
     private FilingProcessed createFilingProcessed(String applicationId) {
         FilingProcessed processed = new FilingProcessed();
         processed.setTransactionId("T" + applicationId);

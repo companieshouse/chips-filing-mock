@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
@@ -24,49 +26,12 @@ class ReaAcceptanceStrategyTest {
         transaction = new Transaction();
     }
 
-    @Test
-    void acceptValidEmail() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = { "{\"registered_email_address\":\"info@acme.com\"}", "{}",
+            "{\"registered_email_address\":null}", "{\"registered_email_address\":\"\"}" })
+    void acceptValidEmailEmpty(String json) throws Exception {
         // GIVEN
-        transaction.setData("{\"registered_email_address\":\"info@acme.com\"}");
-
-        // WHEN
-        FilingStatus filingStatus = strategy.accept(transaction);
-
-        // THEN
-        assertEquals(Status.ACCEPTED, filingStatus.getStatus());
-        assertNull(filingStatus.getRejection());
-    }
-
-    @Test
-    void acceptValidEmailMissing() throws Exception {
-        // GIVEN
-        transaction.setData("{}");
-
-        // WHEN
-        FilingStatus filingStatus = strategy.accept(transaction);
-
-        // THEN
-        assertEquals(Status.ACCEPTED, filingStatus.getStatus());
-        assertNull(filingStatus.getRejection());
-    }
-
-    @Test
-    void acceptValidEmailNull() throws Exception {
-        // GIVEN
-        transaction.setData("{\"registered_email_address\":null}");
-
-        // WHEN
-        FilingStatus filingStatus = strategy.accept(transaction);
-
-        // THEN
-        assertEquals(Status.ACCEPTED, filingStatus.getStatus());
-        assertNull(filingStatus.getRejection());
-    }
-
-    @Test
-    void acceptValidEmailEmpty() throws Exception {
-        // GIVEN
-        transaction.setData("{\"registered_email_address\":\"\"}");
+        transaction.setData(json);
 
         // WHEN
         FilingStatus filingStatus = strategy.accept(transaction);

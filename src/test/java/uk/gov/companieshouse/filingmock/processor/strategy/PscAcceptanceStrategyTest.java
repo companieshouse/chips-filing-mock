@@ -13,7 +13,8 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 import static uk.gov.companieshouse.filingmock.processor.strategy.PscAcceptanceStrategy.INVALID_DATE_ENGLISH_REJECT;
 import static uk.gov.companieshouse.filingmock.processor.strategy.PscAcceptanceStrategy.INVALID_DATE_WELSH_REJECT;
-public class PscAcceptanceStrategyTest {
+
+class PscAcceptanceStrategyTest {
     private PscAcceptanceStrategy strategy;
 
     private Transaction transaction;
@@ -36,7 +37,7 @@ public class PscAcceptanceStrategyTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"2022-08-01", "2022-08-16"})
-    public void rejectCeasedOnDay(LocalDate ceasedOn) throws Exception {
+    void rejectCeasedOnDay(LocalDate ceasedOn) throws Exception {
         transaction.setData("{\"ceased_on\":\"" + ceasedOn + "\"}");
         FilingStatus filingStatus = strategy.accept(transaction);
         assertEquals(Status.REJECTED, filingStatus.getStatus());

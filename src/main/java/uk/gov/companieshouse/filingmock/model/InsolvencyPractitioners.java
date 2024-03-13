@@ -1,9 +1,8 @@
 package uk.gov.companieshouse.filingmock.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Class to hold the data for the insolvency practitioners array of objects

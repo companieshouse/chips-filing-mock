@@ -34,8 +34,8 @@ import uk.gov.companieshouse.filingmock.processor.strategy.AcceptanceStrategyExc
 import uk.gov.companieshouse.filingmock.util.DateService;
 
 @ExtendWith(MockitoExtension.class)
-public class FilingProcessorImplTest {
-    
+class FilingProcessorImplTest {
+
     private static final Instant INSTANT = ZonedDateTime.of(2020, 2, 17, 23, 9, 56, 250, ZoneOffset.UTC).toInstant();
 
     private static final String DATE_TIME_STRING = "2020-02-17T23:09:56Z";
@@ -51,22 +51,22 @@ public class FilingProcessorImplTest {
     private AcceptanceStrategy acceptanceStrategy;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         when(dateService.now()).thenReturn(INSTANT);
         doReturn(acceptanceStrategy).when(processor).getStrategy(any());
     }
-    
+
     @Test
-    public void processAcceptedFiling() throws Exception {
+    void processAcceptedFiling() throws Exception {
         Transaction transaction = createTransaction("1");
         FilingReceived received = createFilingReceived(transaction);
-        
+
         FilingStatus filingStatus = new FilingStatus();
         filingStatus.setStatus(Status.ACCEPTED);
         when(acceptanceStrategy.accept(transaction)).thenReturn(filingStatus);
 
         List<FilingProcessed> processedResult = processor.process(received);
-        
+
         assertEquals(1, processedResult.size());
         FilingProcessed processed = processedResult.get(0);
         assertEquals(received.getApplicationId(), processed.getApplicationId());
@@ -81,19 +81,19 @@ public class FilingProcessorImplTest {
         assertEquals(Status.ACCEPTED, processed.getStatus());
         assertNull(processed.getRejection());
     }
-    
+
     @Test
-    public void processRejectedFiling() throws Exception {
+    void processRejectedFiling() throws Exception {
         Transaction transaction = createTransaction("1");
         FilingReceived received = createFilingReceived(transaction);
-        
+
         FilingStatus filingStatus = new FilingStatus();
         filingStatus.setStatus(Status.REJECTED);
         filingStatus.addRejection("English rejection", "Gwrthod gymraeg");
         when(acceptanceStrategy.accept(transaction)).thenReturn(filingStatus);
 
         List<FilingProcessed> processedResult = processor.process(received);
-        
+
         assertEquals(1, processedResult.size());
         FilingProcessed processed = processedResult.get(0);
         assertEquals(received.getApplicationId(), processed.getApplicationId());
@@ -109,19 +109,19 @@ public class FilingProcessorImplTest {
         assertTrue(processed.getRejection().getEnglishReasons().contains("English rejection"));
         assertTrue(processed.getRejection().getWelshReasons().contains("Gwrthod gymraeg"));
     }
-    
+
     @Test
-    public void processInvalidTransactionData() throws Exception {
+    void processInvalidTransactionData() throws Exception {
         Transaction transaction = createTransaction("1");
         FilingReceived received = createFilingReceived(transaction);
 
         when(acceptanceStrategy.accept(transaction)).thenThrow(AcceptanceStrategyException.class);
-        
+
         assertThrows(FilingProcessingException.class, () -> processor.process(received));
     }
-    
+
     @Test
-    public void processFilingMultipleSubmissions() throws Exception {
+    void processFilingMultipleSubmissions() throws Exception {
         Transaction transaction1 = createTransaction("1");
         Transaction transaction2 = createTransaction("2");
         Transaction transaction3 = createTransaction("3");
@@ -160,7 +160,7 @@ public class FilingProcessorImplTest {
         return FilingReceived.newBuilder().setApplicationId("AppId").setChannelId("chs").setAttempt(1)
                 .setPresenter(presenter).setSubmission(submission).setItems(Arrays.asList(transactions)).build();
     }
-    
+
     private Transaction createTransaction(String id) {
         Transaction transaction = new Transaction();
         transaction.setData("data"+ id);
