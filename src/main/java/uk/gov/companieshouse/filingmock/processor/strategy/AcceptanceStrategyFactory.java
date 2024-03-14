@@ -9,6 +9,7 @@ public class AcceptanceStrategyFactory {
     private static final AcceptanceStrategy REA = new ReaAcceptanceStrategy();
     private static final AcceptanceStrategy INSOLVENCY = new InsolvencyAcceptanceStrategy();
     private static final AcceptanceStrategy CESSATION = new PscAcceptanceStrategy();
+    private static final AcceptanceStrategy OFFICER = new OfficerAcceptanceStrategy();
     private static final AcceptanceStrategy ALWAYS_ACCEPT = t -> new FilingStatus();
 
     private AcceptanceStrategyFactory() {
@@ -27,6 +28,8 @@ public class AcceptanceStrategyFactory {
             return INSOLVENCY;
         } else if (submissionType.contains("cessation")) {
             return CESSATION;
+        } else if ("officer-filing".equals(submissionType)) {
+            return OFFICER;
         }
 
         return ALWAYS_ACCEPT;
