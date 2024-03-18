@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.filingmock.processor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,6 +29,7 @@ import uk.gov.companieshouse.filing.received.SubmissionRecord;
 import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.FilingProcessed;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
+import uk.gov.companieshouse.filingmock.model.Rejection;
 import uk.gov.companieshouse.filingmock.model.Status;
 import uk.gov.companieshouse.filingmock.processor.strategy.AcceptanceStrategy;
 import uk.gov.companieshouse.filingmock.processor.strategy.AcceptanceStrategyException;
@@ -43,10 +45,10 @@ class FilingProcessorImplTest {
     @InjectMocks
     @Spy
     private FilingProcessorImpl processor;
-    
+
     @Mock
     private DateService dateService;
-    
+
     @Mock
     private AcceptanceStrategy acceptanceStrategy;
 
@@ -106,6 +108,7 @@ class FilingProcessorImplTest {
         assertEquals(received.getSubmission().getCompanyNumber(), processed.getCompanyNumber());
         assertEquals(DATE_TIME_STRING, processed.getProcessedAt());
         assertEquals(Status.REJECTED, processed.getStatus());
+        assertNotNull(processed.getRejection());
         assertTrue(processed.getRejection().getEnglishReasons().contains("English rejection"));
         assertTrue(processed.getRejection().getWelshReasons().contains("Gwrthod gymraeg"));
     }
@@ -127,16 +130,19 @@ class FilingProcessorImplTest {
         Transaction transaction3 = createTransaction("3");
         FilingReceived received = createFilingReceived(transaction1, transaction2, transaction3);
 
-        FilingStatus filingStatus = new FilingStatus();
-        filingStatus.setStatus(Status.ACCEPTED);
-        when(acceptanceStrategy.accept(transaction1)).thenReturn(filingStatus);
-        when(acceptanceStrategy.accept(transaction2)).thenReturn(filingStatus);
-        when(acceptanceStrategy.accept(transaction3)).thenReturn(filingStatus);
-        //TODO rgarcia reject one of the transactions
+        FilingStatus acceptedFilingStatus = new FilingStatus();
+        acceptedFilingStatus.setStatus(Status.ACCEPTED);
+        FilingStatus rejectedFilingStatus = new FilingStatus();
+        rejectedFilingStatus.setStatus(Status.REJECTED);
+        Rejection rejection = new Rejection();
+        rejectedFilingStatus.setRejection(rejection);
+        when(acceptanceStrategy.accept(transaction1)).thenReturn(acceptedFilingStatus);
+        when(acceptanceStrategy.accept(transaction2)).thenReturn(rejectedFilingStatus);
+        when(acceptanceStrategy.accept(transaction3)).thenReturn(acceptedFilingStatus);
 
         List<FilingProcessed> processedResult = processor.process(received);
         assertEquals(received.getItems().size(), processedResult.size());
-        for (int i=0; i<received.getItems().size(); i++) {
+        for (int i = 0; i < received.getItems().size(); i++) {
             FilingProcessed processed = processedResult.get(i);
             assertEquals(received.getApplicationId(), processed.getApplicationId());
             assertEquals(received.getChannelId(), processed.getChannelId());
@@ -147,8 +153,13 @@ class FilingProcessorImplTest {
             assertEquals(received.getSubmission().getCompanyName(), processed.getCompanyName());
             assertEquals(received.getSubmission().getCompanyNumber(), processed.getCompanyNumber());
             assertEquals(DATE_TIME_STRING, processed.getProcessedAt());
-            assertEquals(Status.ACCEPTED, processed.getStatus());
-            assertNull(processed.getRejection());
+            if (processed.getSubmissionId().equals(transaction2.getSubmissionId())) {
+                assertEquals(Status.REJECTED, processed.getStatus());
+                assertEquals(rejection, processed.getRejection());
+            } else {
+                assertEquals(Status.ACCEPTED, processed.getStatus());
+                assertNull(processed.getRejection());
+            }
         }
     }
 
@@ -163,7 +174,7 @@ class FilingProcessorImplTest {
 
     private Transaction createTransaction(String id) {
         Transaction transaction = new Transaction();
-        transaction.setData("data"+ id);
+        transaction.setData("data" + id);
         transaction.setSubmissionId(id);
         return transaction;
     }
