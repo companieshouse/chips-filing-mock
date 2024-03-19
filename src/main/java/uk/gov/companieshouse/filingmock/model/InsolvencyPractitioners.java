@@ -11,31 +11,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class InsolvencyPractitioners {
     
     @JsonProperty("practitioners")
-    private List<PractitionerWrapper> practitioners;
+    private List<InsolvencyPractitioner> practitioners;
 
-
-    public String getPractitionerOnePostcode() {
-        if (practitioners == null || practitioners.isEmpty()) {
-            return null;
-        }
-        return practitioners.get(0).address.getPostalCode();
+    public List<InsolvencyPractitioner> getPractitioners() {
+        return practitioners;
     }
-
-}
-
-// although this wraps only address currently, it could be expanded to cover other fields - hence the generic name
-class PractitionerWrapper {
-    // note that existing Address class was used for ROA, but ROA used snake_case in Kafka whereas Insolvency API is using PascalCase
-    @JsonProperty("Address")
-    IPAddressTruncated address;
-}
-
-class IPAddressTruncated {
-    @JsonProperty("PostalCode")
-    private String postalCode;
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
 }
