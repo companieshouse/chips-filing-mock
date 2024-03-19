@@ -23,7 +23,7 @@ import java.util.Optional;
  *
  */
 @Component
-public class PscAcceptanceStrategy implements AcceptanceStrategy{
+public class PscCessationAcceptanceStrategy implements AcceptanceStrategy{
 
     private static final ObjectReader PSC_READER = new ObjectMapper()
             .registerModule(new JavaTimeModule())
@@ -35,7 +35,7 @@ public class PscAcceptanceStrategy implements AcceptanceStrategy{
     static final String INVALID_DATE_ENGLISH_REJECT = "You can not use the 1st or 16th of a month";
     static final String INVALID_DATE_WELSH_REJECT = "You can not use the 1st or 16th of a month";
 
-    PscAcceptanceStrategy() {
+    PscCessationAcceptanceStrategy() {
         // Private constructor
     }
 

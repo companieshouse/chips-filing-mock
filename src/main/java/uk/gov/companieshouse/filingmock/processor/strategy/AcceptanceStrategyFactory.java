@@ -8,7 +8,7 @@ public class AcceptanceStrategyFactory {
     private static final AcceptanceStrategy ROA = new RoaAcceptanceStrategy();
     private static final AcceptanceStrategy REA = new ReaAcceptanceStrategy();
     private static final AcceptanceStrategy INSOLVENCY = new InsolvencyAcceptanceStrategy();
-    private static final AcceptanceStrategy CESSATION = new PscAcceptanceStrategy();
+    private static final AcceptanceStrategy PSC_CESSATION = new PscCessationAcceptanceStrategy();
     private static final AcceptanceStrategy ALWAYS_ACCEPT = t -> new FilingStatus();
 
     private AcceptanceStrategyFactory() {
@@ -25,8 +25,8 @@ public class AcceptanceStrategyFactory {
             return REA;
         } else if (submissionType.contains("insolvency")) /* There are multiple insolvency types e.g. insolvency#600 but all will start with "insolvency," and should use the same strategy */ {
             return INSOLVENCY;
-        } else if (submissionType.contains("cessation")) {
-            return CESSATION;
+        } else if ("psc-filing#cessation".equals(submissionType)) {
+            return PSC_CESSATION;
         }
 
         return ALWAYS_ACCEPT;
