@@ -25,7 +25,7 @@ public class AcceptanceStrategyFactory {
             return REA;
         } else if (submissionType.contains("insolvency")) /* There are multiple insolvency types e.g. insolvency#600 but all will start with "insolvency," and should use the same strategy */ {
             return INSOLVENCY;
-        } else if ("psc-filing#cessation".equals(submissionType)) {
+        } else if (submissionType.startsWith("psc-filing#cessation")) {
             return PSC_CESSATION;
         }
 
