@@ -11,17 +11,17 @@ import uk.gov.companieshouse.filingmock.model.Status;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static uk.gov.companieshouse.filingmock.processor.strategy.PscAcceptanceStrategy.INVALID_DATE_ENGLISH_REJECT;
-import static uk.gov.companieshouse.filingmock.processor.strategy.PscAcceptanceStrategy.INVALID_DATE_WELSH_REJECT;
+import static uk.gov.companieshouse.filingmock.processor.strategy.PscCessationAcceptanceStrategy.INVALID_DATE_ENGLISH_REJECT;
+import static uk.gov.companieshouse.filingmock.processor.strategy.PscCessationAcceptanceStrategy.INVALID_DATE_WELSH_REJECT;
 
-class PscAcceptanceStrategyTest {
-    private PscAcceptanceStrategy strategy;
+class PscCessationAcceptanceStrategyTest {
+    private PscCessationAcceptanceStrategy strategy;
 
     private Transaction transaction;
 
     @BeforeEach
     void setUp() {
-        strategy = new PscAcceptanceStrategy();
+        strategy = new PscCessationAcceptanceStrategy();
         transaction = new Transaction();
     }
 
