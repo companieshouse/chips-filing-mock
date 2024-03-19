@@ -23,7 +23,8 @@ public class AcceptanceStrategyFactory {
             return ROA;
         } else if ("registered-email-address".equals(submissionType)) {
             return REA;
-        } else if (submissionType.contains("insolvency")) /* There are multiple insolvency types e.g. insolvency#600 but all will start with "insolvency," and should use the same strategy */ {
+        } else if (submissionType.startsWith("insolvency")) {
+            /* There are multiple insolvency types e.g. insolvency#600 but all will start with "insolvency" and should use the same strategy */
             return INSOLVENCY;
         } else if (submissionType.contains("cessation")) {
             return CESSATION;
