@@ -1,10 +1,7 @@
 package uk.gov.companieshouse.filingmock.processor.strategy;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -13,37 +10,24 @@ import com.fasterxml.jackson.databind.ObjectReader;
 
 import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.Address;
-import uk.gov.companieshouse.filingmock.model.FilingStatus;
-import uk.gov.companieshouse.filingmock.model.Status;
 
 /**
  * Rejects the filing if the provided address uses Companies House postcode
  *
  */
 @Component
-public class RoaAcceptanceStrategy implements AcceptanceStrategy {
+public class RoaAcceptanceStrategy extends PostCodeNotCHAcceptanceStrategy {
     private static final ObjectReader ADDRESS_READER = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readerFor(Address.class);
-
-    private static final List<String> CH_POSTCODE = Arrays.asList("CF143UZ","BT28BG","SW1H9EX","EH39FF");
-    private static final String CH_POSTCODE_ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
-    private static final String CH_POSTCODE_WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau";
 
     RoaAcceptanceStrategy() {
         // Private constructor
     }
 
     @Override
-    public FilingStatus accept(Transaction transaction) throws AcceptanceStrategyException {
-        FilingStatus filingStatus = new FilingStatus();
-
+    protected boolean containsCompaniesHousePostcode(Transaction transaction) throws AcceptanceStrategyException {
         Address address = getAddress(transaction);
-        if (!isValidAddress(address)) {
-            filingStatus.setStatus(Status.REJECTED);
-            filingStatus.addRejection(CH_POSTCODE_ENGLISH_REJECT, CH_POSTCODE_WELSH_REJECT);
-        }
-
-        return filingStatus;
+        return address != null && isCHPostCode(address.getPostalCode());
     }
 
     private Address getAddress(Transaction transaction) throws AcceptanceStrategyException {
@@ -52,17 +36,6 @@ public class RoaAcceptanceStrategy implements AcceptanceStrategy {
         } catch (IOException e) {
             throw new AcceptanceStrategyException(e);
         }
-    }
-
-    /**
-     * An address is always valid unless it uses Companies House's post code
-     * 
-     * @param address
-     * @return
-     */
-    private boolean isValidAddress(Address address) {
-        return StringUtils.isEmpty(address.getPostalCode())
-                || !CH_POSTCODE.contains(address.getPostalCode().toUpperCase().replaceAll("\\s", ""));
     }
 
 }
