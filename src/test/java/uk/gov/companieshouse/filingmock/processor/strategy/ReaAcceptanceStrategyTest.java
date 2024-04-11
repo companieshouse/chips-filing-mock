@@ -27,11 +27,10 @@ class ReaAcceptanceStrategyTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "{\"registered_email_address\":\"info@acme.com\"}", "{}",
-            "{\"registered_email_address\":null}", "{\"registered_email_address\":\"\"}" })
-    void acceptValidEmailEmpty(String json) throws Exception {
+    @ValueSource(strings = { "info@acme.com", "companieshouse@gov.uk", "mail@companieshouse.gov" })
+    void acceptValidEmailEmpty(String rea) throws Exception {
         // GIVEN
-        transaction.setData(json);
+        transaction.setData("{\"registered_email_address\":\"" + rea + "\"}");
 
         // WHEN
         FilingStatus filingStatus = strategy.accept(transaction);
@@ -42,9 +41,49 @@ class ReaAcceptanceStrategyTest {
     }
 
     @Test
-    void rejectInvalidEmail() throws Exception {
+    void acceptNoREA() throws Exception {
         // GIVEN
-        transaction.setData("{\"registered_email_address\":\"info@companieshouse.gov.uk\"}");
+        transaction.setData("{}");
+
+        // WHEN
+        FilingStatus filingStatus = strategy.accept(transaction);
+
+        // THEN
+        assertEquals(Status.ACCEPTED, filingStatus.getStatus());
+        assertNull(filingStatus.getRejection());
+    }
+
+    @Test
+    void acceptEmailNull() throws Exception {
+        // GIVEN
+        transaction.setData("{\"registered_email_address\":null}");
+
+        // WHEN
+        FilingStatus filingStatus = strategy.accept(transaction);
+
+        // THEN
+        assertEquals(Status.ACCEPTED, filingStatus.getStatus());
+        assertNull(filingStatus.getRejection());
+    }
+
+    @Test
+    void acceptEmailEmpty() throws Exception {
+        // GIVEN
+        transaction.setData("{\"registered_email_address\":\"\"}");
+
+        // WHEN
+        FilingStatus filingStatus = strategy.accept(transaction);
+
+        // THEN
+        assertEquals(Status.ACCEPTED, filingStatus.getStatus());
+        assertNull(filingStatus.getRejection());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "info@companieshouse.gov.uk", "any@companiesHOUSE.gov.uk", "mail@companieshouse.gov.uk "})
+    void rejectInvalidEmail(String rea) throws Exception {
+        // GIVEN
+        transaction.setData("{\"registered_email_address\":\"" + rea + "\"}");
 
         // WHEN
         FilingStatus filingStatus = strategy.accept(transaction);

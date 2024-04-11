@@ -15,7 +15,7 @@ import uk.gov.companieshouse.filingmock.model.ConfirmationStatementFilingData;
 import uk.gov.companieshouse.filingmock.model.Status;
 
 /**
- * Rejects the filing if the provided email does not match the Companies House regex (from registered-emil-address-api).
+ * Rejects the filing if the provided email address uses the Companies House domain
  *
  */
 @Component
@@ -37,7 +37,7 @@ public class ReaAcceptanceStrategy implements AcceptanceStrategy {
     }
 
     private static boolean isValidEmail(String email) {
-        return StringUtils.isEmpty(email) || !email.contains(CH_EMAIL);
+        return StringUtils.isEmpty(email) || !email.trim().toLowerCase().endsWith(CH_EMAIL);
     }
 
     @Override
