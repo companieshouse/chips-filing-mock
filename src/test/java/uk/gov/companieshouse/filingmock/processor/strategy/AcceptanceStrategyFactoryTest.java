@@ -21,11 +21,11 @@ class AcceptanceStrategyFactoryTest {
     }
 
     @Test
-    void getPscStrategy() {
+    void getCessationIndividualPscStrategy() {
         Transaction submission = new Transaction();
-        submission.setKind("cessation");
+        submission.setKind("psc-filing#cessation#individual");
         AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
-        assertTrue(strategy instanceof PscAcceptanceStrategy);
+        assertTrue(strategy instanceof PscCessationAcceptanceStrategy);
     }
 
     @Test
