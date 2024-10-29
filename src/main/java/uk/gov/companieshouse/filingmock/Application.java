@@ -5,14 +5,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-
+import org.springframework.scheduling.annotation.Scheduled;
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filingmock.model.FilingProcessed;
 import uk.gov.companieshouse.filingmock.processor.FilingProcessingException;
@@ -24,11 +22,12 @@ import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 
 @SpringBootApplication
-public class Application implements CommandLineRunner {
+public class Application {
 
     public static final String APPLICATION_NAME = "chips-filing-mock";
     private static final Logger LOG = LoggerFactory.getLogger(APPLICATION_NAME);
-
+    @Value("${application.waitTimeMs:1000}")
+    private static final long SLEEP_TIME = 1000; // ms
     @Autowired
     private FilingReader reader;
     @Autowired
@@ -36,27 +35,14 @@ public class Application implements CommandLineRunner {
     @Autowired
     private FilingProcessor processor;
 
-    private boolean running = true;
-
-    @Value("${application.waitTimeMs:1000}")
-    private long sleepTime = 1000; // ms
-
     public static void main(String[] args) {
         new SpringApplicationBuilder(Application.class).web(WebApplicationType.NONE).run();
     }
 
-    @Override
-    public void run(String... args) throws InterruptedException {
-        LOG.info(APPLICATION_NAME + " : running...");
-        while (running) {
-            processFilings();
-            Thread.sleep(sleepTime);
-        }
-    }
-
+    @Scheduled(fixedDelay = SLEEP_TIME)
     protected void processFilings() {
-        reader.read().stream().map(this::processFiling).flatMap(Collection::stream).filter(Objects::nonNull)
-                .forEach(this::writeFiling);
+        reader.read().stream().map(this::processFiling).flatMap(Collection::stream)
+                .filter(Objects::nonNull).forEach(this::writeFiling);
     }
 
     private Collection<FilingProcessed> processFiling(FilingReceived received) {

@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
 import uk.gov.companieshouse.filingmock.model.FilingProcessed;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,25 +41,27 @@ class FilingWriterImplTest {
     @Test
     void write() throws Exception {
         ResponseEntity<Object> response = new ResponseEntity<>(HttpStatus.CREATED);
-        when(rest.postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any())).thenReturn(response);
-        
+        when(rest.postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any())).thenReturn(
+                response);
+
         assertTrue(writer.write(filingProcessed));
-        
+
         verify(rest).postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any());
     }
 
     @Test
     void writeErrorResponse() throws Exception {
         ResponseEntity<Object> response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        when(rest.postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any())).thenReturn(response);
-        
+        when(rest.postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any())).thenReturn(
+                response);
+
         assertThrows(FilingWriterException.class, () -> writer.write(filingProcessed));
     }
 
     @Test
     void writeRestException() throws Exception {
-        when(rest.postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any()))
-                .thenThrow(new RestClientException("exception"));
+        when(rest.postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any())).thenThrow(
+                new RestClientException("exception"));
 
         assertThrows(FilingWriterException.class, () -> writer.write(filingProcessed));
     }

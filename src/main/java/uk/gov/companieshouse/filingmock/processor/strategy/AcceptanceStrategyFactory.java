@@ -16,7 +16,8 @@ public class AcceptanceStrategyFactory {
     }
 
     public static AcceptanceStrategy getStrategy(Transaction submission) {
-        // If getKind() returns null, methods like .contains would generate nullPointer exception, so treat as empty string instead
+        // If getKind() returns null, methods like .contains would generate nullPointer
+        // exception, so treat as empty string instead
         String submissionType = (submission.getKind() != null) ? submission.getKind() : "";
 
         if ("registered-office-address".equals(submissionType)) {
@@ -24,7 +25,8 @@ public class AcceptanceStrategyFactory {
         } else if ("registered-email-address".equals(submissionType)) {
             return REA;
         } else if (submissionType.startsWith("insolvency")) {
-            /* There are multiple insolvency types e.g. insolvency#600 but all will start with "insolvency" and should use the same strategy */
+            /* There are multiple insolvency types e.g. insolvency#600 but all will start with
+            "insolvency" and should use the same strategy */
             return INSOLVENCY;
         } else if (submissionType.contains("cessation")) {
             return CESSATION;

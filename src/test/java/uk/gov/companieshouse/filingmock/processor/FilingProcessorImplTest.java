@@ -14,7 +14,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filing.received.PresenterRecord;
 import uk.gov.companieshouse.filing.received.SubmissionRecord;
@@ -38,7 +36,8 @@ import uk.gov.companieshouse.filingmock.util.DateService;
 @ExtendWith(MockitoExtension.class)
 class FilingProcessorImplTest {
 
-    private static final Instant INSTANT = ZonedDateTime.of(2020, 2, 17, 23, 9, 56, 250, ZoneOffset.UTC).toInstant();
+    private static final Instant INSTANT = ZonedDateTime.of(2020, 2, 17, 23, 9, 56, 250,
+            ZoneOffset.UTC).toInstant();
 
     private static final String DATE_TIME_STRING = "2020-02-17T23:09:56Z";
 
@@ -166,10 +165,12 @@ class FilingProcessorImplTest {
     private FilingReceived createFilingReceived(Transaction... transactions) {
         PresenterRecord presenter = PresenterRecord.newBuilder().setLanguage("en").setUserId("user")
                 .setForename("forename").setSurname("surname").build();
-        SubmissionRecord submission = SubmissionRecord.newBuilder().setCompanyName("Company").setCompanyNumber("123456")
-                .setTransactionId("1234-5678").setReceivedAt("2020-01-20T15:22:24Z").build();
-        return FilingReceived.newBuilder().setApplicationId("AppId").setChannelId("chs").setAttempt(1)
-                .setPresenter(presenter).setSubmission(submission).setItems(Arrays.asList(transactions)).build();
+        SubmissionRecord submission = SubmissionRecord.newBuilder().setCompanyName("Company")
+                .setCompanyNumber("123456").setTransactionId("1234-5678")
+                .setReceivedAt("2020-01-20T15:22:24Z").build();
+        return FilingReceived.newBuilder().setApplicationId("AppId").setChannelId("chs")
+                .setAttempt(1).setPresenter(presenter).setSubmission(submission)
+                .setItems(Arrays.asList(transactions)).build();
     }
 
     private Transaction createTransaction(String id) {

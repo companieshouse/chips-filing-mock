@@ -7,7 +7,7 @@ public interface FilingWriter {
 
     /**
      * Write a FilingProcessed to the kafka topic
-     * 
+     *
      * @param filingProcessed The filing processed message
      * @return
      */

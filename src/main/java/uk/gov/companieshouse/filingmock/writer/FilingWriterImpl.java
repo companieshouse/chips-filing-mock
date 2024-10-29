@@ -2,7 +2,6 @@ package uk.gov.companieshouse.filingmock.writer;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
 import uk.gov.companieshouse.filingmock.Application;
 import uk.gov.companieshouse.filingmock.model.FilingProcessed;
 import uk.gov.companieshouse.logging.Logger;
@@ -32,10 +30,12 @@ public class FilingWriterImpl implements FilingWriter {
         try {
             Map<String, Object> logData = getLoggedData(filingProcessed);
             LOG.trace("Sending response to kafka api", logData);
-            
-            ResponseEntity<Object> response = rest.postForEntity(kafkaApiUrl, filingProcessed, Object.class);
+
+            ResponseEntity<Object> response = rest.postForEntity(kafkaApiUrl, filingProcessed,
+                    Object.class);
             if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
-                throw new FilingWriterException("Invalid response from Kafka API: " + response.getStatusCode());
+                throw new FilingWriterException(
+                        "Invalid response from Kafka API: " + response.getStatusCode());
             }
             LOG.info("Filing complete", logData);
             return true;
@@ -43,7 +43,7 @@ public class FilingWriterImpl implements FilingWriter {
             throw new FilingWriterException(e);
         }
     }
-    
+
     private Map<String, Object> getLoggedData(FilingProcessed filingProcessed) {
         Map<String, Object> data = new HashMap<>();
         data.put("transaction_id", filingProcessed.getTransactionId());

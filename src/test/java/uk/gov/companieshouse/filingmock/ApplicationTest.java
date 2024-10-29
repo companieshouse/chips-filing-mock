@@ -8,13 +8,12 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filing.received.SubmissionRecord;
 import uk.gov.companieshouse.filingmock.model.FilingProcessed;
@@ -62,7 +61,7 @@ class ApplicationTest {
         FilingProcessed processed2 = createFilingProcessed(received2.getApplicationId());
         FilingProcessed processed3 = createFilingProcessed(received2.getApplicationId());
 
-        when(processor.process(received1)).thenReturn(Arrays.asList(processed1));
+        when(processor.process(received1)).thenReturn(List.of(processed1));
         when(processor.process(received2)).thenReturn(Arrays.asList(processed2, processed3));
 
         app.processFilings();
@@ -108,8 +107,8 @@ class ApplicationTest {
         FilingProcessed processed3 = createFilingProcessed(received2.getApplicationId());
 
         when(processor.process(received1)).thenReturn(Arrays.asList(processed1, processed2));
-        when(processor.process(received2)).thenReturn(Arrays.asList(processed3));
-        
+        when(processor.process(received2)).thenReturn(List.of(processed3));
+
         when(writer.write(processed1)).thenThrow(FilingWriterException.class);
 
         app.processFilings();

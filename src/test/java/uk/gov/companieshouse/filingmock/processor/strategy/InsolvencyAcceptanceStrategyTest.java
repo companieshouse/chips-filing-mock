@@ -1,20 +1,24 @@
 package uk.gov.companieshouse.filingmock.processor.strategy;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
 import uk.gov.companieshouse.filingmock.model.Status;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 class InsolvencyAcceptanceStrategyTest {
 
-    private static final String ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
-    private static final String WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau";
+    private static final String ENGLISH_REJECT = "The postcode you have supplied cannot be "
+            + "Companies House postcode";
+    private static final String WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn "
+            + "god post Tŷ'r Cwmnïau";
 
     private InsolvencyAcceptanceStrategy strategy;
 
@@ -92,16 +96,14 @@ class InsolvencyAcceptanceStrategyTest {
         assertTrue(filingStatus.getRejection().getEnglishReasons().contains(ENGLISH_REJECT));
         assertEquals(1, filingStatus.getRejection().getWelshReasons().size());
         assertTrue(filingStatus.getRejection().getWelshReasons().contains(WELSH_REJECT));
-        
+
     }
 
     private String createData(String... postCodes) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\"practitioners\":[");
-        sb.append(Stream.of(postCodes).map(p -> "{\"Address\":{\"PostalCode\":\"" + p + "\"}}")
-                .collect(Collectors.joining(", ")));
-        sb.append("]}");
-        return sb.toString();
+        String sb = "{\"practitioners\":[" + Stream.of(postCodes)
+                .map(p -> "{\"Address\":{\"PostalCode\":\"" + p + "\"}}")
+                .collect(Collectors.joining(", ")) + "]}";
+        return sb;
     }
 
 }

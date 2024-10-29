@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.filingmock.model;
 
 public class FilingStatus {
+
     private Status status = Status.ACCEPTED;
     private Rejection rejection;
 

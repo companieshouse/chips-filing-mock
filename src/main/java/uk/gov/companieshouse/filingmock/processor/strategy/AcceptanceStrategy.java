@@ -8,6 +8,7 @@ public interface AcceptanceStrategy {
 
     /**
      * Accept or reject a submission
+     *
      * @param transaction
      * @return
      * @throws AcceptanceStrategyException

@@ -1,19 +1,17 @@
 package uk.gov.companieshouse.filingmock.reader;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filingmock.Application;
 import uk.gov.companieshouse.kafka.consumer.CHConsumer;
@@ -27,6 +25,7 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 
 @Component
 public class FilingReaderImpl implements FilingReader {
+
     private static final Logger LOG = LoggerFactory.getLogger(Application.APPLICATION_NAME);
 
     @Autowired
@@ -49,15 +48,15 @@ public class FilingReaderImpl implements FilingReader {
     @PostConstruct
     public void init() {
         ConsumerConfig config = new ConsumerConfig();
-        config.setBrokerAddresses(new String[] { brokerAddress });
-        config.setTopics(Arrays.asList(topicName));
+        config.setBrokerAddresses(new String[]{brokerAddress});
+        config.setTopics(Collections.singletonList(topicName));
         config.setPollTimeout(pollTimeout);
         config.setGroupName(applicationName);
 
         consumer = createConsumer(config);
         consumer.connect();
     }
-    
+
     CHConsumer createConsumer(ConsumerConfig config) {
         return new CHKafkaConsumerGroup(config);
     }
@@ -83,7 +82,7 @@ public class FilingReaderImpl implements FilingReader {
     }
 
     private FilingReceived deserialise(Message msg) throws DeserializationException {
-        return deserializerFactory.getSpecificRecordDeserializer(FilingReceived.class).fromBinary(msg,
-                FilingReceived.getClassSchema());
+        return deserializerFactory.getSpecificRecordDeserializer(FilingReceived.class)
+                .fromBinary(msg, FilingReceived.getClassSchema());
     }
 }
