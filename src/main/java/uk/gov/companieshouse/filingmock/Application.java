@@ -54,8 +54,8 @@ public class Application {
         try {
             LOG.trace("Filing received", data);
             return processor.process(received);
-        } catch (FilingProcessingException e) {
-            LOG.error("Failure processing filing", e, data);
+        } catch (FilingProcessingException ex) {
+            LOG.error("Failure processing filing", ex, data);
             return Collections.emptyList();
         }
     }
@@ -63,10 +63,10 @@ public class Application {
     private void writeFiling(FilingProcessed processed) {
         try {
             writer.write(processed);
-        } catch (FilingWriterException e) {
+        } catch (FilingWriterException ex) {
             Map<String, Object> data = new HashMap<>();
             data.put("transaction id", processed.getTransactionId());
-            LOG.error("Failure sending message", e, data);
+            LOG.error("Failure sending message", ex, data);
         }
     }
 }

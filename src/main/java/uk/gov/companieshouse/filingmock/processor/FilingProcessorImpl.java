@@ -55,8 +55,8 @@ public class FilingProcessorImpl implements FilingProcessor {
                 FilingStatus status = getStrategy(transaction).accept(transaction);
                 processed.setStatus(status.getStatus());
                 processed.setRejection(status.getRejection());
-            } catch (AcceptanceStrategyException e) {
-                throw new FilingProcessingException(filingReceived, e);
+            } catch (AcceptanceStrategyException ex) {
+                throw new FilingProcessingException(filingReceived, ex);
             }
             processed.setProcessedAt(processedTime);
 

@@ -3,7 +3,6 @@ package uk.gov.companieshouse.filingmock.reader;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,28 +22,49 @@ import uk.gov.companieshouse.kafka.message.Message;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 
+/**
+ * The type Filing reader.
+ */
 @Component
 public class FilingReaderImpl implements FilingReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.APPLICATION_NAME);
 
+    /**
+     * The Application name.
+     */
     @Autowired
     String applicationName;
 
+    /**
+     * The Broker address.
+     */
     @Value("${kafka.broker.address}")
     String brokerAddress;
 
+    /**
+     * The Topic name.
+     */
     @Value("${kafka.consumer.topic}")
     String topicName;
 
+    /**
+     * The Poll timeout.
+     */
     @Value("${kafka.consumer.pollTimeout:100}")
     long pollTimeout = 100;
 
+    /**
+     * The Consumer.
+     */
     CHConsumer consumer;
 
     @Autowired
     private DeserializerFactory deserializerFactory;
 
+    /**
+     * Init.
+     */
     @PostConstruct
     public void init() {
         ConsumerConfig config = new ConsumerConfig();
@@ -57,10 +77,19 @@ public class FilingReaderImpl implements FilingReader {
         consumer.connect();
     }
 
+    /**
+     * Create consumer ch consumer.
+     *
+     * @param config the config
+     * @return the ch consumer
+     */
     CHConsumer createConsumer(ConsumerConfig config) {
         return new CHKafkaConsumerGroup(config);
     }
 
+    /**
+     * Close.
+     */
     @PreDestroy
     public void close() {
         consumer.close();
@@ -72,10 +101,10 @@ public class FilingReaderImpl implements FilingReader {
         for (Message msg : consumer.consume()) {
             try {
                 receivedList.add(deserialise(msg));
-            } catch (Exception e) {
+            } catch (Exception ex) {
                 Map<String, Object> data = new HashMap<>();
                 data.put("message", msg.getValue() == null ? "" : new String(msg.getValue()));
-                LOG.error("Failed to read message from queue", e, data);
+                LOG.error("Failed to read message from queue", ex, data);
             }
         }
         return receivedList;

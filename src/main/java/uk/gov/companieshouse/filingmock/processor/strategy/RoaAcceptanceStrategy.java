@@ -9,10 +9,10 @@ import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.Address;
 
 /**
- * Rejects the filing if the provided address uses Companies House postcode
+ * Rejects the filing if the provided address uses Companies House postcode.
  */
 @Component
-public class RoaAcceptanceStrategy extends PostCodeNotCHAcceptanceStrategy {
+public class RoaAcceptanceStrategy extends PostCodeNotChAcceptanceStrategy {
 
     private static final ObjectReader ADDRESS_READER = new ObjectMapper().configure(
             DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readerFor(Address.class);
@@ -25,14 +25,14 @@ public class RoaAcceptanceStrategy extends PostCodeNotCHAcceptanceStrategy {
     protected boolean containsCompaniesHousePostcode(Transaction transaction)
             throws AcceptanceStrategyException {
         Address address = getAddress(transaction);
-        return address != null && isCHPostCode(address.getPostalCode());
+        return address != null && isChPostCode(address.getPostalCode());
     }
 
     private Address getAddress(Transaction transaction) throws AcceptanceStrategyException {
         try {
             return ADDRESS_READER.readValue(transaction.getData());
-        } catch (IOException e) {
-            throw new AcceptanceStrategyException(e);
+        } catch (IOException ex) {
+            throw new AcceptanceStrategyException(ex);
         }
     }
 

@@ -9,15 +9,18 @@ import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.InsolvencyPractitioners;
 
 /**
- * Rejects the filing only if the first practitioner's address uses Companies House postcode
+ * Rejects the filing only if the first practitioner's address uses Companies House postcode.
  */
 @Component
-public class InsolvencyAcceptanceStrategy extends PostCodeNotCHAcceptanceStrategy {
+public class InsolvencyAcceptanceStrategy extends PostCodeNotChAcceptanceStrategy {
 
     private static final ObjectReader PRACTITIONERS_READER = new ObjectMapper().configure(
                     DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .readerFor(InsolvencyPractitioners.class);
 
+    /**
+     * Instantiates a new Insolvency acceptance strategy.
+     */
     InsolvencyAcceptanceStrategy() {
         // Private constructor
     }
@@ -31,15 +34,15 @@ public class InsolvencyAcceptanceStrategy extends PostCodeNotCHAcceptanceStrateg
                 && !practitioners.getPractitioners().isEmpty()) {
             postCode = practitioners.getPractitioners().get(0).getPostalCode();
         }
-        return isCHPostCode(postCode);
+        return isChPostCode(postCode);
     }
 
     private InsolvencyPractitioners getPractitioners(Transaction transaction)
             throws AcceptanceStrategyException {
         try {
             return PRACTITIONERS_READER.readValue(transaction.getData());
-        } catch (IOException e) {
-            throw new AcceptanceStrategyException(e);
+        } catch (IOException ex) {
+            throw new AcceptanceStrategyException(ex);
         }
     }
 }

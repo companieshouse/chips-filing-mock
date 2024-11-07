@@ -39,8 +39,8 @@ public class FilingWriterImpl implements FilingWriter {
             }
             LOG.info("Filing complete", logData);
             return true;
-        } catch (RestClientException e) {
-            throw new FilingWriterException(e);
+        } catch (RestClientException ex) {
+            throw new FilingWriterException(ex);
         }
     }
 

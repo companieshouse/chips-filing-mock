@@ -26,7 +26,8 @@ public class PscAcceptanceStrategy implements AcceptanceStrategy {
     static final String INVALID_DATE_ENGLISH_REJECT = "You can not use the 1st or 16th of a month";
     static final String INVALID_DATE_WELSH_REJECT = "You can not use the 1st or 16th of a month";
     private static final ObjectReader PSC_READER = new ObjectMapper().registerModule(
-                    new JavaTimeModule()).setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+                    new JavaTimeModule()).setPropertyNamingStrategy(
+                            PropertyNamingStrategy.SNAKE_CASE)
             .setDateFormat(new SimpleDateFormat("yyyy-MM-dd"))
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .readerFor(PscCommon.class);
@@ -54,8 +55,8 @@ public class PscAcceptanceStrategy implements AcceptanceStrategy {
 
         try {
             return PSC_READER.readValue(transaction.getData());
-        } catch (IOException e) {
-            throw new AcceptanceStrategyException(e);
+        } catch (IOException ex) {
+            throw new AcceptanceStrategyException(ex);
         }
     }
 

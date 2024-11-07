@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * Class to hold the data for the insolvency practitioners array of objects
+ * Class to hold the data for the insolvency practitioners array of objects.
  */
 
 public class InsolvencyPractitioners {

@@ -12,15 +12,15 @@ import uk.gov.companieshouse.filingmock.model.FilingStatus;
 import uk.gov.companieshouse.filingmock.model.Status;
 
 /**
- * Rejects the filing if the provided email address uses the Companies House domain
+ * Rejects the filing if the provided email address uses the Companies House domain.
  */
 @Component
 public class ReaAcceptanceStrategy implements AcceptanceStrategy {
 
-    static final String CH_EMAIL_ENGLISH_REJECT = "The email you have supplied cannot be "
-            + "Companies House email";
-    static final String CH_EMAIL_WELSH_REJECT = "Ni all yr e-bost a ddarparwyd gennych fod yn "
-            + "e-bost gan Dŷ'r Cwmnïau";
+    static final String CH_EMAIL_ENGLISH_REJECT =
+            "The email you have supplied cannot be " + "Companies House email";
+    static final String CH_EMAIL_WELSH_REJECT =
+            "Ni all yr e-bost a ddarparwyd gennych fod yn " + "e-bost gan Dŷ'r Cwmnïau";
     private static final ObjectReader READER = new ObjectMapper().configure(
                     DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .readerFor(ConfirmationStatementFilingData.class);
@@ -30,8 +30,8 @@ public class ReaAcceptanceStrategy implements AcceptanceStrategy {
             throws AcceptanceStrategyException {
         try {
             return READER.readValue(transaction.getData());
-        } catch (IOException e) {
-            throw new AcceptanceStrategyException(e);
+        } catch (IOException ex) {
+            throw new AcceptanceStrategyException(ex);
         }
     }
 

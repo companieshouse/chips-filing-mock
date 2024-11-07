@@ -3,6 +3,9 @@ package uk.gov.companieshouse.filingmock.processor.strategy;
 import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
 
+/**
+ * The type Acceptance strategy factory.
+ */
 public class AcceptanceStrategyFactory {
 
     private static final AcceptanceStrategy ROA = new RoaAcceptanceStrategy();
@@ -15,6 +18,12 @@ public class AcceptanceStrategyFactory {
         // Private constructor
     }
 
+    /**
+     * Gets strategy.
+     *
+     * @param submission the submission
+     * @return the strategy
+     */
     public static AcceptanceStrategy getStrategy(Transaction submission) {
         // If getKind() returns null, methods like .contains would generate nullPointer
         // exception, so treat as empty string instead
