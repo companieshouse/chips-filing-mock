@@ -30,8 +30,10 @@
     <avro.version>1.12.0</avro.version>
 
     <spring-boot-starter.version>3.3.5</spring-boot-starter.version>
-    <spring-boot-dependencies.version>${spring-boot-starter.version}</spring-boot-dependencies.version>
-    <spring-boot-maven-plugin.version>${spring-boot-starter.version}</spring-boot-maven-plugin.version>
+    <spring-boot-dependencies.version>${spring-boot-starter.version}
+    </spring-boot-dependencies.version>
+    <spring-boot-maven-plugin.version>${spring-boot-starter.version}
+    </spring-boot-maven-plugin.version>
 
   </properties>
 
@@ -88,6 +90,18 @@
       <groupId>uk.gov.companieshouse</groupId>
       <artifactId>kafka-models</artifactId>
       <version>${kafka-models.version}</version>
+      <exclusions>
+        <!-- CVE-2024-8184(6.5), CVE-2024-6763(5.3) -->
+        <exclusion>
+          <groupId>org.eclipse.jetty.http2</groupId>
+          <artifactId>http2-server</artifactId>
+        </exclusion>
+        <!-- CVE-2024-8184(6.5), CVE-2024-6763(5.3) -->
+        <exclusion>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-webapp</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>uk.gov.companieshouse</groupId>
