@@ -29,38 +29,37 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 public class FilingReaderImpl implements FilingReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.APPLICATION_NAME);
-
+    private final DeserializerFactory deserializerFactory;
     /**
      * The Application name.
      */
-    @Autowired
     String applicationName;
-
     /**
      * The Broker address.
      */
     @Value("${kafka.broker.address}")
     String brokerAddress;
-
     /**
      * The Topic name.
      */
     @Value("${kafka.consumer.topic}")
     String topicName;
-
     /**
      * The Poll timeout.
      */
     @Value("${kafka.consumer.pollTimeout:100}")
     long pollTimeout = 100;
-
     /**
      * The Consumer.
      */
     CHConsumer consumer;
 
+
     @Autowired
-    private DeserializerFactory deserializerFactory;
+    public FilingReaderImpl(String applicationName, DeserializerFactory deserializerFactory) {
+        this.applicationName = applicationName;
+        this.deserializerFactory = deserializerFactory;
+    }
 
     /**
      * Init.

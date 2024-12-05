@@ -3,7 +3,7 @@ package uk.gov.companieshouse.filingmock.processor.strategy;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -26,8 +26,7 @@ public class PscAcceptanceStrategy implements AcceptanceStrategy {
     static final String INVALID_DATE_ENGLISH_REJECT = "You can not use the 1st or 16th of a month";
     static final String INVALID_DATE_WELSH_REJECT = "You can not use the 1st or 16th of a month";
     private static final ObjectReader PSC_READER = new ObjectMapper().registerModule(
-                    new JavaTimeModule()).setPropertyNamingStrategy(
-                            PropertyNamingStrategy.SNAKE_CASE)
+                    new JavaTimeModule()).setPropertyNamingStrategy(new SnakeCaseStrategy())
             .setDateFormat(new SimpleDateFormat("yyyy-MM-dd"))
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .readerFor(PscCommon.class);

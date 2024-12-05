@@ -32,7 +32,7 @@ public class InsolvencyAcceptanceStrategy extends PostCodeNotChAcceptanceStrateg
         String postCode = null;
         if (practitioners != null && practitioners.getPractitioners() != null
                 && !practitioners.getPractitioners().isEmpty()) {
-            postCode = practitioners.getPractitioners().get(0).getPostalCode();
+            postCode = practitioners.getPractitioners().getFirst().getPostalCode();
         }
         return isChPostCode(postCode);
     }

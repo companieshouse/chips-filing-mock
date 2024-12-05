@@ -22,8 +22,12 @@ public class FilingWriterImpl implements FilingWriter {
     @Value("${kafka.api.url}")
     String kafkaApiUrl;
 
+    private final RestTemplate rest;
+
     @Autowired
-    private RestTemplate rest;
+    public FilingWriterImpl(RestTemplate rest) {
+        this.rest = rest;
+    }
 
     @Override
     public boolean write(FilingProcessed filingProcessed) throws FilingWriterException {

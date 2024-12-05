@@ -3,7 +3,6 @@ package uk.gov.companieshouse.filingmock.processor.strategy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.filing.received.Transaction;

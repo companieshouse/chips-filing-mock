@@ -25,9 +25,12 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 public class FilingProcessorImpl implements FilingProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.APPLICATION_NAME);
+    private final DateService dateService;
 
     @Autowired
-    private DateService dateService;
+    public FilingProcessorImpl(DateService dateService) {
+        this.dateService = dateService;
+    }
 
     @Override
     public List<FilingProcessed> process(FilingReceived filingReceived)

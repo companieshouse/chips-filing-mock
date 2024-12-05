@@ -15,10 +15,10 @@ import uk.gov.companieshouse.filingmock.model.Status;
 
 class InsolvencyAcceptanceStrategyTest {
 
-    private static final String ENGLISH_REJECT = "The postcode you have supplied cannot be "
-            + "Companies House postcode";
-    private static final String WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn "
-            + "god post Tŷ'r Cwmnïau";
+    private static final String ENGLISH_REJECT =
+            "The postcode you have supplied cannot be " + "Companies House postcode";
+    private static final String WELSH_REJECT =
+            "Ni all y cod post rydych wedi'i gyflenwi fod yn " + "god post Tŷ'r Cwmnïau";
 
     private InsolvencyAcceptanceStrategy strategy;
 

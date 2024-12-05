@@ -28,12 +28,16 @@ public class Application {
     private static final Logger LOG = LoggerFactory.getLogger(APPLICATION_NAME);
     @Value("${application.waitTimeMs:1000}")
     private static final long SLEEP_TIME = 1000; // ms
+    private final FilingReader reader;
+    private final FilingWriter writer;
+    private final FilingProcessor processor;
+
     @Autowired
-    private FilingReader reader;
-    @Autowired
-    private FilingWriter writer;
-    @Autowired
-    private FilingProcessor processor;
+    public Application(FilingReader reader, FilingWriter writer, FilingProcessor processor) {
+        this.reader = reader;
+        this.writer = writer;
+        this.processor = processor;
+    }
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(Application.class).web(WebApplicationType.NONE).run();

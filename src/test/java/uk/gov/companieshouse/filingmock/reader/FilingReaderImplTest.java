@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -31,8 +32,8 @@ import uk.gov.companieshouse.kafka.message.Message;
 @ExtendWith(MockitoExtension.class)
 class FilingReaderImplTest {
 
-    @InjectMocks
     @Spy
+    @InjectMocks
     private FilingReaderImpl reader;
 
     @Mock
@@ -44,7 +45,7 @@ class FilingReaderImplTest {
     @Mock
     private AvroDeserializer<FilingReceived> deserializer;
 
-    @Test
+    @BeforeEach
     void init() {
         doReturn(consumer).when(reader).createConsumer(Mockito.any());
         reader.brokerAddress = "kafka address";
@@ -65,7 +66,7 @@ class FilingReaderImplTest {
         assertEquals(reader.brokerAddress, config.getBrokerAddresses()[0]);
         assertNotNull(config.getTopics());
         assertEquals(1, config.getTopics().size());
-        assertEquals(reader.topicName, config.getTopics().get(0));
+        assertEquals(reader.topicName, config.getTopics().getFirst());
         assertEquals(reader.applicationName, config.getGroupName());
         assertEquals(reader.pollTimeout, config.getPollTimeout());
     }

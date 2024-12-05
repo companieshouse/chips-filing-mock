@@ -69,7 +69,7 @@ class FilingProcessorImplTest {
         List<FilingProcessed> processedResult = processor.process(received);
 
         assertEquals(1, processedResult.size());
-        FilingProcessed processed = processedResult.get(0);
+        FilingProcessed processed = processedResult.getFirst();
         assertEquals(received.getApplicationId(), processed.getApplicationId());
         assertEquals(received.getChannelId(), processed.getChannelId());
         assertEquals(received.getPresenter().getLanguage(), processed.getPresenterLanguage());
@@ -96,7 +96,7 @@ class FilingProcessorImplTest {
         List<FilingProcessed> processedResult = processor.process(received);
 
         assertEquals(1, processedResult.size());
-        FilingProcessed processed = processedResult.get(0);
+        FilingProcessed processed = processedResult.getFirst();
         assertEquals(received.getApplicationId(), processed.getApplicationId());
         assertEquals(received.getChannelId(), processed.getChannelId());
         assertEquals(received.getPresenter().getLanguage(), processed.getPresenterLanguage());
