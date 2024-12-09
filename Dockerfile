@@ -1,14 +1,7 @@
-FROM centos:7
+ARG IMAGE_VERSION="latest"
+FROM 416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-corretto-runtime-21:${IMAGE_VERSION} 
 
-RUN yum update -y && \
-    yum install -y \
-    epel-release-7 \
-    zip \
-    unzip \
-    java-1.8.0-openjdk \
-    maven \
-    make && \
-    yum clean all
+WORKDIR /opt
 
 COPY chips-filing-mock.jar /opt/chips-filing-mock/
 COPY start-ecs /usr/local/bin/
