@@ -18,11 +18,9 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 public class FilingWriterImpl implements FilingWriter {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.APPLICATION_NAME);
-
+    private final RestTemplate rest;
     @Value("${kafka.api.url}")
     String kafkaApiUrl;
-
-    private final RestTemplate rest;
 
     @Autowired
     public FilingWriterImpl(RestTemplate rest) {
