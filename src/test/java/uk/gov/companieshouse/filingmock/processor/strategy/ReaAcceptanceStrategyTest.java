@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
 import uk.gov.companieshouse.filingmock.model.Status;
@@ -27,7 +26,7 @@ class ReaAcceptanceStrategyTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "info@acme.com", "companieshouse@gov.uk", "mail@companieshouse.gov" })
+    @ValueSource(strings = {"info@acme.com", "companieshouse@gov.uk", "mail@companieshouse.gov"})
     void acceptValidEmailEmpty(String rea) throws Exception {
         // GIVEN
         transaction.setData("{\"registered_email_address\":\"" + rea + "\"}");
@@ -80,7 +79,8 @@ class ReaAcceptanceStrategyTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "info@companieshouse.gov.uk", "any@companiesHOUSE.gov.uk", "mail@companieshouse.gov.uk "})
+    @ValueSource(strings = {"info@companieshouse.gov.uk", "any@companiesHOUSE.gov.uk",
+            "mail@companieshouse.gov.uk "})
     void rejectInvalidEmail(String rea) throws Exception {
         // GIVEN
         transaction.setData("{\"registered_email_address\":\"" + rea + "\"}");
@@ -91,9 +91,11 @@ class ReaAcceptanceStrategyTest {
         // THEN
         assertEquals(Status.REJECTED, filingStatus.getStatus());
         assertEquals(1, filingStatus.getRejection().getEnglishReasons().size());
-        assertTrue(filingStatus.getRejection().getEnglishReasons().contains(ReaAcceptanceStrategy.CH_EMAIL_ENGLISH_REJECT));
+        assertTrue(filingStatus.getRejection().getEnglishReasons()
+                .contains(ReaAcceptanceStrategy.CH_EMAIL_ENGLISH_REJECT));
         assertEquals(1, filingStatus.getRejection().getWelshReasons().size());
-        assertTrue(filingStatus.getRejection().getWelshReasons().contains(ReaAcceptanceStrategy.CH_EMAIL_WELSH_REJECT));
+        assertTrue(filingStatus.getRejection().getWelshReasons()
+                .contains(ReaAcceptanceStrategy.CH_EMAIL_WELSH_REJECT));
     }
 
     @Test

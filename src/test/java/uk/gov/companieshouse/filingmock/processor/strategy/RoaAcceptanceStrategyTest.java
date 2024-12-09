@@ -7,15 +7,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
 import uk.gov.companieshouse.filingmock.model.Status;
 
 class RoaAcceptanceStrategyTest {
 
-    private static final String ENGLISH_REJECT = "The postcode you have supplied cannot be Companies House postcode";
-    private static final String WELSH_REJECT = "Ni all y cod post rydych wedi'i gyflenwi fod yn god post Tŷ'r Cwmnïau";
+    private static final String ENGLISH_REJECT =
+            "The postcode you have supplied cannot be " + "Companies House postcode";
+    private static final String WELSH_REJECT =
+            "Ni all y cod post rydych wedi'i gyflenwi fod yn " + "god post Tŷ'r Cwmnïau";
 
     private RoaAcceptanceStrategy strategy;
 
@@ -64,14 +65,14 @@ class RoaAcceptanceStrategyTest {
     }
 
     private void postCodeTest(String postCode) throws Exception {
-        transaction.setData("{\"postal_code\":\""+ postCode +"\"}");
+        transaction.setData("{\"postal_code\":\"" + postCode + "\"}");
         FilingStatus filingStatus = strategy.accept(transaction);
         assertEquals(Status.REJECTED, filingStatus.getStatus());
         assertEquals(1, filingStatus.getRejection().getEnglishReasons().size());
         assertTrue(filingStatus.getRejection().getEnglishReasons().contains(ENGLISH_REJECT));
         assertEquals(1, filingStatus.getRejection().getWelshReasons().size());
         assertTrue(filingStatus.getRejection().getWelshReasons().contains(WELSH_REJECT));
-        
+
     }
 
     @Test

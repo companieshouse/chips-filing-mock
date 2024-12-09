@@ -4,39 +4,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
- * Class to hold the data for ROA address objects
+ * Class to hold the data for ROA address objects.
  */
 
 public class Address {
-    
+
     @JsonProperty("address_line_1")
     private String addressLine1;
-    
+
     @JsonProperty("address_line_2")
     private String addressLine2;
-    
+
     @JsonProperty("country")
     private String country;
-    
+
     @JsonProperty("locality")
     private String locality;
-    
+
     @JsonProperty("po_box")
     private String poBox;
-    
+
     @JsonProperty("postal_code")
     private String postalCode;
-    
+
     @JsonProperty("premises")
     private String premises;
-    
+
     @JsonProperty("region")
     private String region;
-    
+
     public String getAddressLine1() {
         return addressLine1;
     }
-    
+
     public void setAddressLine1(String addressLine1) {
         this.addressLine1 = addressLine1;
     }
@@ -52,7 +52,7 @@ public class Address {
     public String getCountry() {
         return country;
     }
-    
+
     @JsonSetter
     public void setCountry(String country) {
         this.country = country;
