@@ -58,7 +58,8 @@ Application specific attributes | Value                                | Descrip
 :---------|:-----------------------------------------------------------------------------|:-----------
 **ECS Cluster**        |test-data                                     | ECS cluster (stack) the service belongs to
 **Load balancer**      |N/A                                           | The load balancer that sits in front of the service
-**Concourse pipeline**     |[Pipeline link](https://ci-platform.companieshouse.gov.uk/teams/team-development/pipelines/chips-filing-mock) <br> [Pipeline code](https://github.com/companieshouse/ci-pipelines/blob/master/pipelines/ssplatform/team-development/chips-filing-mock)                                  | Concourse pipeline link in shared services
+**Concourse pipeline**     |[Pipeline link](https://ci-platform.companieshouse.gov.uk/teams/team-development/pipelines/chips-filing-mock) <br> [Pipeline code](https://github.com/companieshouse/ci-pipelines/blob/master/pipelines/ssplatform/team-development/chips-filing-mock)                                  | Concourse pipeline link in shared services, runs upto a docker build
+**Concourse pipeline deploy**     |[Pipeline link test-data-stack](https://ci.platform.aws.chdev.org/teams/team-platform/pipelines/test-data-stack) <br> [Pipeline code](https://github.com/companieshouse/ci-pipelines/blob/master/pipelines/platform/team-platform/test-data-stack)                                  | Concourse pipeline link for test-data-stack - deploys the terraform code - due to be migrated to new concourse
 
 
 ### Contributing
