@@ -1,0 +1,6 @@
+environment = "livesbox"
+aws_profile = "live-eu-west-2"
+
+# service configs
+use_set_environment_files = true
+#is_sandbox_service = true ??
