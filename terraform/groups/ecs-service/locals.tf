@@ -18,7 +18,6 @@ locals {
   secrets_required           = false
 
   stack_secrets   = jsondecode(data.vault_generic_secret.stack_secrets.data_json)
-  #service_secrets = jsondecode(data.vault_generic_secret.service_secrets.data_json)
   service_secrets = (
     local.secrets_required && length(data.vault_generic_secret.service_secrets) > 0
     ? jsondecode(data.vault_generic_secret.service_secrets[0].data_json)
