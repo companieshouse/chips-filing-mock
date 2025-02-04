@@ -36,6 +36,10 @@
 
     <jib-maven-plugin.version>3.4.4</jib-maven-plugin.version>
 
+    <!-- Overrides -->
+    <!-- CVE-2024-56128 -->
+    <kafka-clients.version>3.7.2</kafka-clients.version>
+
   </properties>
 
   <dependencyManagement>
@@ -80,6 +84,12 @@
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-clients</artifactId>
+      <version>${kafka-clients.version}</version>
     </dependency>
 
     <dependency>
