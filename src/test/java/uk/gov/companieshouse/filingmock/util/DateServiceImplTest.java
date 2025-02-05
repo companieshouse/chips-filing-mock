@@ -3,11 +3,11 @@ package uk.gov.companieshouse.filingmock.util;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Instant;
-
 import org.junit.jupiter.api.Test;
- class DateServiceImplTest {
 
-    private DateServiceImpl service = new DateServiceImpl();
+class DateServiceImplTest {
+
+    private final DateServiceImpl service = new DateServiceImpl();
 
     @Test
     void testNow() {

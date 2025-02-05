@@ -1,5 +1,13 @@
 package uk.gov.companieshouse.filingmock.processor.strategy;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static uk.gov.companieshouse.filingmock.processor.strategy.PscAcceptanceStrategy.INVALID_DATE_ENGLISH_REJECT;
+import static uk.gov.companieshouse.filingmock.processor.strategy.PscAcceptanceStrategy.INVALID_DATE_WELSH_REJECT;
+
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,13 +16,8 @@ import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
 import uk.gov.companieshouse.filingmock.model.Status;
 
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static uk.gov.companieshouse.filingmock.processor.strategy.PscAcceptanceStrategy.INVALID_DATE_ENGLISH_REJECT;
-import static uk.gov.companieshouse.filingmock.processor.strategy.PscAcceptanceStrategy.INVALID_DATE_WELSH_REJECT;
-
 class PscAcceptanceStrategyTest {
+
     private PscAcceptanceStrategy strategy;
 
     private Transaction transaction;
@@ -42,9 +45,11 @@ class PscAcceptanceStrategyTest {
         FilingStatus filingStatus = strategy.accept(transaction);
         assertEquals(Status.REJECTED, filingStatus.getStatus());
         assertEquals(1, filingStatus.getRejection().getEnglishReasons().size());
-        assertTrue(filingStatus.getRejection().getEnglishReasons().contains(INVALID_DATE_ENGLISH_REJECT));
+        assertTrue(filingStatus.getRejection().getEnglishReasons()
+                .contains(INVALID_DATE_ENGLISH_REJECT));
         assertEquals(1, filingStatus.getRejection().getWelshReasons().size());
-        assertTrue(filingStatus.getRejection().getWelshReasons().contains(INVALID_DATE_WELSH_REJECT));
+        assertTrue(
+                filingStatus.getRejection().getWelshReasons().contains(INVALID_DATE_WELSH_REJECT));
     }
 
     @Test

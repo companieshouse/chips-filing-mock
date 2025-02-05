@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.filingmock.util;
 
 import java.time.Instant;
-
 import org.springframework.stereotype.Service;
 
 @Service
