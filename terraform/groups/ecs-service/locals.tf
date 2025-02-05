@@ -7,7 +7,7 @@ locals {
   container_port             = "8080"
   docker_repo                = "chips-filing-mock"
   kms_alias                  = "alias/${var.aws_profile}/environment-services-kms"
-  healthcheck_path           = "/chips-filing-mock/healthcheck" # healthcheck path for chips-filing-mock
+  healthcheck_path           = "/chips-filing-mock/healthcheck" ## healthcheck path for chips-filing-mock
   healthcheck_matcher        = "200"
   vpc_name                   = local.stack_secrets["vpc_name"]
   s3_config_bucket           = data.vault_generic_secret.shared_s3.data["config_bucket_name"]
