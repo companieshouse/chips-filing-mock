@@ -1,6 +1,6 @@
 # Define all hardcoded local variable and local variables looked up from data resources
 locals {
-  stack_name                 = "test-data" # this must match the stack name (cluster) the service deploys into
+  stack_name                 = "test-utility" # this must match the stack name (cluster) the service deploys into
   name_prefix                = "${local.stack_name}-${var.environment}"
   global_prefix              = "global-${var.environment}"
   service_name               = "chips-filing-mock"

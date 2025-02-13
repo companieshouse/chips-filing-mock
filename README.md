@@ -46,17 +46,15 @@ The supported environmental variables have been categorised by use case and are 
 
 ## Terraform ECS
 
-The Terraform code to deploy this service is kept in this repository currently - [test-data-stack](https://github.com/companieshouse/test-data-stack/tree/master)
-
 ### What does this code do?
 
-The code present in test-data-stack repository is used to define and deploy a dockerised container in AWS ECS.
+The code present in this repository is used to define and deploy a dockerised container in AWS ECS.
 This is done by calling a [module](https://github.com/companieshouse/terraform-modules/tree/main/aws/ecs) from terraform-modules. Application specific attributes are injected and the service is then deployed using Terraform via the CICD platform 'Concourse'.
 
 
 Application specific attributes | Value                                | Description
 :---------|:-----------------------------------------------------------------------------|:-----------
-**ECS Cluster**        |test-data                                     | ECS cluster (stack) the service belongs to
+**ECS Cluster**        |test-utility                                     | ECS cluster (stack) the service belongs to
 **Load balancer**      |N/A                                           | The load balancer that sits in front of the service
 **Concourse pipeline**     |[Pipeline link](https://ci-platform.companieshouse.gov.uk/teams/team-development/pipelines/chips-filing-mock) <br> [Pipeline code](https://github.com/companieshouse/ci-pipelines/blob/master/pipelines/ssplatform/team-development/chips-filing-mock)                                  | Concourse pipeline link in shared services, runs upto a docker build
 
