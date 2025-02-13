@@ -122,7 +122,7 @@ variable "use_set_environment_files" {
   description = "Toggle default global and shared environment files"
 }
 
-variable "chips_filing_mock_version" {
+variable "filing_mock_version" {
   type        = string
   description = "The version of the chips-filing-mock container to run."
 }
