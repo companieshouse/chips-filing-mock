@@ -28,7 +28,7 @@
 
     <avro.version>1.12.0</avro.version>
 
-    <spring-boot-starter.version>3.3.5</spring-boot-starter.version>
+    <spring-boot-starter.version>3.4.2</spring-boot-starter.version>
     <spring-boot-dependencies.version>${spring-boot-starter.version}
     </spring-boot-dependencies.version>
     <spring-boot-maven-plugin.version>${spring-boot-starter.version}
@@ -39,6 +39,8 @@
     <!-- Overrides -->
     <!-- CVE-2024-56128 -->
     <kafka-clients.version>3.7.2</kafka-clients.version>
+    <!-- CVE-2024-57699 -->
+    <json-smart.version>2.4.11</json-smart.version>
 
   </properties>
 
@@ -59,7 +61,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>net.minidev</groupId>
+      <artifactId>json-smart</artifactId>
+      <version>${json-smart.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
