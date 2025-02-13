@@ -3,7 +3,7 @@ locals {
   stack_name                 = "test-utility" # this must match the stack name (cluster) the service deploys into
   name_prefix                = "${local.stack_name}-${var.environment}"
   global_prefix              = "global-${var.environment}"
-  service_name               = "chips-filing-mock"
+  service_name               = "filing-mock"
   container_port             = "8080"
   docker_repo                = "chips-filing-mock"
   kms_alias                  = "alias/${var.aws_profile}/environment-services-kms"
