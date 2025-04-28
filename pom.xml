@@ -55,7 +55,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
+<!-- Temp change to test sbom changes-->
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
