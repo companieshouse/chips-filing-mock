@@ -57,11 +57,6 @@
   </dependencyManagement>
 <!-- Temp change to test sbom changes-->
   <dependencies>
-    <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
-      <version>1.17</version>
-    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
