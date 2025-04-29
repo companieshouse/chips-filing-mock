@@ -36,6 +36,12 @@
 
     <jib-maven-plugin.version>3.4.4</jib-maven-plugin.version>
 
+    <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
+    <sonar.login></sonar.login>
+    <sonar.password></sonar.password>
+    <sonar.projectName>chips-filing-mock</sonar.projectName>
+    <sonar.projectKey>uk.gov.companieshouse:chips-filing-mock</sonar.projectKey>
+
     <!-- Overrides -->
     <!-- CVE-2024-56128 -->
     <kafka-clients.version>3.7.2</kafka-clients.version>
