@@ -28,7 +28,7 @@
 
     <avro.version>1.12.0</avro.version>
 
-    <spring-boot-starter.version>3.4.2</spring-boot-starter.version>
+    <spring-boot-starter.version>3.4.5</spring-boot-starter.version>
     <spring-boot-dependencies.version>${spring-boot-starter.version}
     </spring-boot-dependencies.version>
     <spring-boot-maven-plugin.version>${spring-boot-starter.version}
