@@ -42,6 +42,11 @@
     <!-- CVE-2024-57699 -->
     <json-smart.version>2.4.11</json-smart.version>
 
+    <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
+    <sonar.login></sonar.login>
+    <sonar.password></sonar.password>
+    <sonar.projectName>chips-filing-mock</sonar.projectName>
+    <sonar.projectKey>uk.gov.companieshouse:chips-filing-mock</sonar.projectKey>
   </properties>
 
   <dependencyManagement>
