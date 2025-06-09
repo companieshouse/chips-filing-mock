@@ -30,6 +30,7 @@
 
     <spring-boot-starter.version>3.4.5</spring-boot-starter.version>
     <spring-context.version>6.2.7</spring-context.version>
+    <tomcat-embed-core.version>11.0.7</tomcat-embed-core.version>
 
     <jib-maven-plugin.version>3.4.4</jib-maven-plugin.version>
 
@@ -68,6 +69,11 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
         <version>${spring-context.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-core</artifactId>
+        <version>${tomcat-embed-core.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
