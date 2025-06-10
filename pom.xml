@@ -35,7 +35,7 @@
 
     <!-- Overrides -->
     <!-- CVE-2024-56128 -->
-    <kafka-clients.version>3.7.2</kafka-clients.version>
+    <kafka-clients.version>3.9.1</kafka-clients.version>
     <!-- CVE-2024-57699 -->
     <json-smart.version>2.4.11</json-smart.version>
 
