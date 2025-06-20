@@ -33,7 +33,7 @@
     <spring-context.version>6.2.7</spring-context.version>
     <kafka-clients.version>4.0.0</kafka-clients.version>
     <spring-web.version>6.2.8</spring-web.version>
-    <tomcat-embed-core.version>11.0.7</tomcat-embed-core.version>
+    <tomcat-embed-core.version>11.0.8</tomcat-embed-core.version>
 
     <jib-maven-plugin.version>3.4.4</jib-maven-plugin.version>
 
