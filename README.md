@@ -55,7 +55,8 @@ This is done by calling a [module](https://github.com/companieshouse/terraform-m
 This service now resides in the test-utility cluster, which is a replacement for the old 'test-data' legacy cluster.
 The pipeline to deploy the new 'test-utility' cluster is - [test-utility stack pipeline link](https://ci-platform.companieshouse.gov.uk/teams/team-development/pipelines/ci-test-utility-services-stack).
 
-This service does not deploy to Staging and Live, but to the Stagsbox and Livesbox environments instead.<br>In cidev, the service is scaled down (desired tasks set to 0) unless the service is being tested, in which case, desired tasks set to 1. This variable in changed in the cidev profile.
+This service does not deploy to Staging and Live, but to the Stagsbox and Livesbox environments instead.<br>
+In cidev, the service is scaled down (desired tasks set to 0) unless the service is being tested, in which case, desired tasks set to 1. This variable in changed in the cidev profile.
 
 
 Application specific attributes | Value                                | Description
