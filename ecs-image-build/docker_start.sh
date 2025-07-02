@@ -4,4 +4,4 @@
 
 
 PORT=8080
-exec java -jar -Dserver.port="${PORT}" "chips-filing-mock.jar"
+exec java -jar -Dserver.port="${PORT}" -XX:MaxRAMPercentage=80 "chips-filing-mock.jar"

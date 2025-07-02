@@ -48,8 +48,16 @@ The supported environmental variables have been categorised by use case and are 
 
 ### What does this code do?
 
+
 The code present in this repository is used to define and deploy a dockerised container in AWS ECS.
-This is done by calling a [module](https://github.com/companieshouse/terraform-modules/tree/main/aws/ecs) from terraform-modules. Application specific attributes are injected and the service is then deployed using Terraform via the CICD platform 'Concourse'.
+
+This is done by calling a [module](https://github.com/companieshouse/terraform-modules/tree/main/aws/ecs) from terraform-modules. Application specific attributes are injected and the service is then deployed using Terraform via the CICD platform 'Concourse'. 
+
+This service now resides in the test-utility cluster, which is a replacement for the old 'test-data' legacy cluster.
+The pipeline to deploy the new 'test-utility' cluster is - [test-utility stack pipeline link](https://ci-platform.companieshouse.gov.uk/teams/team-development/pipelines/ci-test-utility-services-stack).
+
+This service does not deploy to Staging and Live, but to the Stagsbox and Livesbox environments instead.<br>
+In cidev, the service is scaled down (desired tasks set to 0) unless the service is being tested, in which case, desired tasks set to 1. This variable in changed in the cidev profile.
 
 
 Application specific attributes | Value                                | Description
