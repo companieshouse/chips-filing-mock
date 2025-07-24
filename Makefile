@@ -34,7 +34,6 @@ endif
 	mvn versions:set -DnewVersion=$(version) -DgenerateBackupPoms=false
 	mvn package -DskipTests=true
 	$(eval tmpdir:=$(shell mktemp -d build-XXXXXXXXXX))
-	cp ./start.sh $(tmpdir)
 	cp ./target/$(artifact_name)-$(version).jar $(tmpdir)/$(artifact_name).jar
 	cd $(tmpdir); zip -r ../$(artifact_name)-$(version).zip *
 	rm -rf $(tmpdir)
@@ -52,8 +51,4 @@ sonar-pr-analysis:
 
 .PHONY: docker-build
 docker-build:
-	docker build -t $(artifact_name):$(version) .
-
-.PHONY: docker-run
-docker-run:
-	docker run -i -t --env-file=local_env $(artifact_name):$(version)
+	mvn compile jib:dockerBuild

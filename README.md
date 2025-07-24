@@ -15,15 +15,15 @@ Requirements
 ------------
 In order to run the API locally you'll need the following installed on your machine:
 
-- [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [Java 21](https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/downloads-list.html)
 - [Maven](https://maven.apache.org/download.cgi)
 - [Kafka](https://kafka.apache.org)
 
 
 Getting started
 ---------------
-1. Run `make`
-2. Run `./start.sh`
+1. Run `chs-dev services enable chips-filing-mock`
+2. Run `chs-dev up`
 
 ## Environment Variables
 The supported environmental variables have been categorised by use case and are as follows.
