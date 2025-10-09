@@ -5,13 +5,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.scheduling.annotation.Scheduled;
+
 import uk.gov.companieshouse.filing.received.FilingReceived;
 import uk.gov.companieshouse.filingmock.model.FilingProcessed;
 import uk.gov.companieshouse.filingmock.processor.FilingProcessingException;
