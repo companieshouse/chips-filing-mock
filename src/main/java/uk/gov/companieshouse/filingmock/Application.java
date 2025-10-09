@@ -28,7 +28,7 @@ public class Application {
     
     private static final Logger LOG = LoggerFactory.getLogger(APPLICATION_NAME);
     
-    // @Value("${application.waitTimeMs:1000}") the annotation parameter must be static final but it is not possible to inject the value
+    // @Value("${application.waitTimeMs:1000}") FIXME the annotation parameter must be static final but it is not possible to inject the value
     private static final long SLEEP_TIME = 1000; // ms
     
     private final FilingReader reader;
