@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,9 +25,12 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 public class Application {
 
     public static final String APPLICATION_NAME = "chips-filing-mock";
+    
     private static final Logger LOG = LoggerFactory.getLogger(APPLICATION_NAME);
-    @Value("${application.waitTimeMs:1000}")
+    
+    // @Value("${application.waitTimeMs:1000}") the annotation parameter must be static final but it is not possible to inject the value
     private static final long SLEEP_TIME = 1000; // ms
+    
     private final FilingReader reader;
     private final FilingWriter writer;
     private final FilingProcessor processor;
