@@ -45,9 +45,9 @@ class InsolvencyAcceptanceStrategyTest {
     @ParameterizedTest
     @ValueSource(strings = {"{}", 
             "{\"practitioners\":[]}", 
-            "{\"practitioners\\\":[{\"Address\":{}}]}"})
+            "{\"practitioners\":[{\"Address\":{}}]}"})
     void accept(String transactionData) throws Exception {
-        transaction.setData("{\"practitioners\":[{\"Address\":{}}]}");
+        transaction.setData(transactionData);
         
         FilingStatus filingStatus = strategy.accept(transaction);
         

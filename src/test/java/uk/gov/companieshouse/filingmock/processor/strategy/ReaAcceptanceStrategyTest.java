@@ -42,7 +42,7 @@ class ReaAcceptanceStrategyTest {
     @ValueSource(strings = {"{}", "{\"registered_email_address\":null}", "{\"registered_email_address\":\"\"}"})
     void accept(String transactionData) throws Exception {
         // GIVEN
-        transaction.setData("{\"registered_email_address\":\"\"}");
+        transaction.setData(transactionData);
 
         // WHEN
         FilingStatus filingStatus = strategy.accept(transaction);
