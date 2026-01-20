@@ -6,7 +6,7 @@ use_set_environment_files = true
 
 # testing purposes set to 1
 # set to 0 during normal service, due to acceptance emails sent and transactions marked as accepted in CHS before being processed in Chips.
-desired_task_count = 1
+desired_task_count = 0
 
 # Scheduled scaling of tasks
 service_autoscale_enabled  = true
