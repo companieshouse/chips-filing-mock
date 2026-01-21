@@ -4,11 +4,10 @@ aws_profile = "development-eu-west-2"
 # service configs
 use_set_environment_files = true
 
-# testing purposes set to 1
+# for testing purposes set desired_task_count = 1, and service_autoscale_enabled = true
 # set to 0 during normal service, due to acceptance emails sent and transactions marked as accepted in CHS before being processed in Chips.
 desired_task_count = 0
 
-# Scheduled scaling of tasks
-service_autoscale_enabled  = true
+service_autoscale_enabled  = false
 service_scaledown_schedule = "55 19 * * ? *"
 service_scaleup_schedule   = "5 6 * * ? *"
