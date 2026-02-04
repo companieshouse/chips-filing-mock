@@ -7,8 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
 import uk.gov.companieshouse.filing.received.Transaction;
 import uk.gov.companieshouse.filingmock.model.FilingStatus;
 import uk.gov.companieshouse.filingmock.model.Status;
@@ -38,26 +42,15 @@ class InsolvencyAcceptanceStrategyTest {
         assertNull(filingStatus.getRejection());
     }
 
-    @Test
-    void acceptNoPractitioners() throws Exception {
-        transaction.setData("{}");
+    @ParameterizedTest
+    @ValueSource(strings = {"{}", 
+            "{\"practitioners\":[]}", 
+            "{\"practitioners\":[{\"Address\":{}}]}"})
+    void accept(String transactionData) throws Exception {
+        transaction.setData(transactionData);
+        
         FilingStatus filingStatus = strategy.accept(transaction);
-        assertEquals(Status.ACCEPTED, filingStatus.getStatus());
-        assertNull(filingStatus.getRejection());
-    }
-
-    @Test
-    void acceptEmptyPractitioners() throws Exception {
-        transaction.setData("{\"practitioners\":[]}");
-        FilingStatus filingStatus = strategy.accept(transaction);
-        assertEquals(Status.ACCEPTED, filingStatus.getStatus());
-        assertNull(filingStatus.getRejection());
-    }
-
-    @Test
-    void acceptFirstPractitionerNoPostcode() throws Exception {
-        transaction.setData("{\"practitioners\":[{\"Address\":{}}]}");
-        FilingStatus filingStatus = strategy.accept(transaction);
+        
         assertEquals(Status.ACCEPTED, filingStatus.getStatus());
         assertNull(filingStatus.getRejection());
     }
@@ -100,10 +93,9 @@ class InsolvencyAcceptanceStrategyTest {
     }
 
     private String createData(String... postCodes) {
-        String sb = "{\"practitioners\":[" + Stream.of(postCodes)
+        return "{\"practitioners\":[" + Stream.of(postCodes)
                 .map(p -> "{\"Address\":{\"PostalCode\":\"" + p + "\"}}")
                 .collect(Collectors.joining(", ")) + "]}";
-        return sb;
     }
 
 }
