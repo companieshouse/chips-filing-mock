@@ -46,6 +46,7 @@
 
     <assertj-core.version>3.27.7</assertj-core.version>
     <log4j-api.version>2.25.3</log4j-api.version>
+    <logback-core.version>1.5.28</logback-core.version>
   </properties>
 
   <dependencyManagement>
@@ -83,6 +84,13 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>${commons-lang3.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
+        <version>${logback-core.version}</version>
+        <scope>compile</scope>
       </dependency>
 
     </dependencies>
