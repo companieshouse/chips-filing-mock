@@ -43,6 +43,8 @@
     <sonar.password></sonar.password>
     <sonar.projectName>chips-filing-mock</sonar.projectName>
     <sonar.projectKey>uk.gov.companieshouse:chips-filing-mock</sonar.projectKey>
+
+    <assertj-core.version>3.27.7</assertj-core.version>
   </properties>
 
   <dependencyManagement>
@@ -60,6 +62,13 @@
         <version>${spring-boot-starter.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj-core.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
