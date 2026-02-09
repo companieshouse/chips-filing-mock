@@ -79,6 +79,12 @@
         <scope>compile</scope>
       </dependency>
 
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons-lang3.version}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -177,12 +183,6 @@
       <groupId>org.sonarsource.scanner.maven</groupId>
       <artifactId>sonar-maven-plugin</artifactId>
       <version>${sonar-maven-plugin.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${commons-lang3.version}</version>
     </dependency>
 
   </dependencies>
