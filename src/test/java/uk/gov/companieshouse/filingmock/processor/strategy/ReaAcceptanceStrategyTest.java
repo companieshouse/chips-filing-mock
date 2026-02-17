@@ -39,36 +39,10 @@ class ReaAcceptanceStrategyTest {
         assertNull(filingStatus.getRejection());
     }
 
-    @Test
-    void acceptNoREA() throws Exception {
+    @ValueSource(strings = {"{}", "{\"registered_email_address\":null}", "{\"registered_email_address\":\"\"}"})
+    void accept(String transactionData) throws Exception {
         // GIVEN
-        transaction.setData("{}");
-
-        // WHEN
-        FilingStatus filingStatus = strategy.accept(transaction);
-
-        // THEN
-        assertEquals(Status.ACCEPTED, filingStatus.getStatus());
-        assertNull(filingStatus.getRejection());
-    }
-
-    @Test
-    void acceptEmailNull() throws Exception {
-        // GIVEN
-        transaction.setData("{\"registered_email_address\":null}");
-
-        // WHEN
-        FilingStatus filingStatus = strategy.accept(transaction);
-
-        // THEN
-        assertEquals(Status.ACCEPTED, filingStatus.getStatus());
-        assertNull(filingStatus.getRejection());
-    }
-
-    @Test
-    void acceptEmailEmpty() throws Exception {
-        // GIVEN
-        transaction.setData("{\"registered_email_address\":\"\"}");
+        transaction.setData(transactionData);
 
         // WHEN
         FilingStatus filingStatus = strategy.accept(transaction);
