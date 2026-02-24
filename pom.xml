@@ -26,7 +26,6 @@
     <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
     <avro.version>1.12.1</avro.version>
     <spring-boot-starter.version>3.5.9</spring-boot-starter.version>
-    <kafka-clients.version>3.9.1</kafka-clients.version>
     <jib-maven-plugin.version>3.4.6</jib-maven-plugin.version>
     <opentelemetry-instrumentation-bom.version>2.14.0</opentelemetry-instrumentation-bom.version>
 
@@ -96,7 +95,6 @@
 
   <dependencies>
     <dependency>
-    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
     </dependency>
@@ -130,18 +128,6 @@
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka-clients</artifactId>
-      <version>${kafka-clients.version}</version>
-      <exclusions>
-        <exclusion>
-            <groupId>org.lz4</groupId>
-            <artifactId>lz4-java</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
