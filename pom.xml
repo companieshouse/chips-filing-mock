@@ -48,6 +48,7 @@
     <log4j-api.version>2.25.3</log4j-api.version>
     <logback-core.version>1.5.28</logback-core.version>
     <tomcat-embed-core.version>10.1.52</tomcat-embed-core.version>
+    <jetty-server.version>12.1.7</jetty-server.version>
   </properties>
 
   <dependencyManagement>
@@ -98,6 +99,13 @@
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-core</artifactId>
         <version>${tomcat-embed-core.version}</version>
+        <scope>compile</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-server</artifactId>
+        <version>${jetty-server.version}</version>
         <scope>compile</scope>
       </dependency>
 
