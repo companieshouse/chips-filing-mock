@@ -32,13 +32,6 @@
     <json-smart.version>2.6.0</json-smart.version>
     <opentelemetry-instrumentation-bom.version>2.26.1</opentelemetry-instrumentation-bom.version>
 
-    <!-- Sonar Config -->
-    <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
-    <sonar.login></sonar.login>
-    <sonar.password></sonar.password>
-    <sonar.projectName>chips-filing-mock</sonar.projectName>
-    <sonar.projectKey>uk.gov.companieshouse:chips-filing-mock</sonar.projectKey>
-
     <assertj-core.version>3.27.7</assertj-core.version>
     <log4j-api.version>2.25.3</log4j-api.version>
     <logback-core.version>1.5.32</logback-core.version>
