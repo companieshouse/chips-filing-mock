@@ -27,7 +27,7 @@
     <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
     <avro.version>1.12.1</avro.version>
     <spring-boot-starter.version>3.5.9</spring-boot-starter.version>
-    <kafka-clients.version>3.9.1</kafka-clients.version>
+    <kafka-clients.version>3.9.2</kafka-clients.version>
     <jib-maven-plugin.version>3.4.6</jib-maven-plugin.version>
     <json-smart.version>2.5.2</json-smart.version>
     <opentelemetry-instrumentation-bom.version>2.14.0</opentelemetry-instrumentation-bom.version>
@@ -47,7 +47,7 @@
     <assertj-core.version>3.27.7</assertj-core.version>
     <log4j-api.version>2.25.3</log4j-api.version>
     <logback-core.version>1.5.28</logback-core.version>
-    <tomcat-embed-core.version>10.1.52</tomcat-embed-core.version>
+    <tomcat-embed-core.version>10.1.54</tomcat-embed-core.version>
     <jetty-server.version>12.1.7</jetty-server.version>
     <jackson-core.version>2.21.1</jackson-core.version>
     <jackson-annotations.version>2.21</jackson-annotations.version>

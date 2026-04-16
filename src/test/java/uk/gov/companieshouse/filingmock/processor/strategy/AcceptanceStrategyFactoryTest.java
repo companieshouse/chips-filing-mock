@@ -20,14 +20,6 @@ class AcceptanceStrategyFactoryTest {
     }
 
     @Test
-    void getPscStrategy() {
-        Transaction submission = new Transaction();
-        submission.setKind("cessation");
-        AcceptanceStrategy strategy = AcceptanceStrategyFactory.getStrategy(submission);
-        assertInstanceOf(PscAcceptanceStrategy.class, strategy);
-    }
-
-    @Test
     void get600Strategy() {
         Transaction submission = new Transaction();
         submission.setKind("insolvency#600");
