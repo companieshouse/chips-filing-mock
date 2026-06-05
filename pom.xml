@@ -30,7 +30,7 @@
     <kafka-clients.version>3.9.2</kafka-clients.version>
     <jib-maven-plugin.version>3.4.6</jib-maven-plugin.version>
     <json-smart.version>2.5.2</json-smart.version>
-    <opentelemetry-instrumentation-bom.version>2.14.0</opentelemetry-instrumentation-bom.version>
+    <opentelemetry-instrumentation-bom.version>2.28.1</opentelemetry-instrumentation-bom.version>
 
     <!-- Overrides -->
     <!-- CVE-2025-48924 -->
