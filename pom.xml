@@ -46,7 +46,7 @@
 
     <assertj-core.version>3.27.7</assertj-core.version>
     <log4j-api.version>2.25.4</log4j-api.version>
-    <logback-core.version>1.5.28</logback-core.version>
+    <logback-core.version>1.5.33</logback-core.version>
     <tomcat-embed-core.version>11.0.22</tomcat-embed-core.version>
     <tomcat-embed-websocket.version>11.0.22</tomcat-embed-websocket.version>
     <jetty-server.version>12.1.7</jetty-server.version>
