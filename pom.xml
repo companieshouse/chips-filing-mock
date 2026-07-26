@@ -49,7 +49,7 @@
     <logback-core.version>1.5.28</logback-core.version>
     <tomcat-embed-core.version>11.0.22</tomcat-embed-core.version>
     <tomcat-embed-websocket.version>11.0.22</tomcat-embed-websocket.version>
-    <jetty-server.version>12.1.7</jetty-server.version>
+    <jetty-server.version>12.1.10</jetty-server.version>
     <jackson-core.version>2.21.1</jackson-core.version>
     <jackson-annotations.version>2.21</jackson-annotations.version>
     <kotlin.version>2.2.21</kotlin.version>
