@@ -33,7 +33,9 @@
     <!-- Overrides -->
     <!-- CVE-2025-48924 -->
     <commons-lang3.version>3.18.0</commons-lang3.version>
-    <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+    
+    <!-- CVE-2025-14813 -->
+    <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
 
     <!-- Sonar Config -->
     <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
