@@ -7,11 +7,11 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 @Component
-class OpenTelemetryAppenderInitializer implements InitializingBean {
+public class OpenTelemetryAppenderInitializer implements InitializingBean {
 
     private final OpenTelemetry openTelemetry;
 
-    OpenTelemetryAppenderInitializer(OpenTelemetry openTelemetry) {
+    public OpenTelemetryAppenderInitializer(OpenTelemetry openTelemetry) {
         this.openTelemetry = openTelemetry;
     }
 
