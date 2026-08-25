@@ -26,16 +26,16 @@
     <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
     <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
     <avro.version>1.12.1</avro.version>
-    <spring-boot-starter.version>3.5.14</spring-boot-starter.version>
+    <spring-boot-starter.version>4.0.7</spring-boot-starter.version>
     <kafka-clients.version>3.9.2</kafka-clients.version>
     <jib-maven-plugin.version>3.4.6</jib-maven-plugin.version>
-    <json-smart.version>2.5.2</json-smart.version>
-    <opentelemetry-instrumentation-bom.version>2.28.1</opentelemetry-instrumentation-bom.version>
-
+    <opentelemetry-version>2.29.0</opentelemetry-version>
     <!-- Overrides -->
     <!-- CVE-2025-48924 -->
     <commons-lang3.version>3.18.0</commons-lang3.version>
-    <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+    
+    <!-- CVE-2025-14813 -->
+    <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
 
     <!-- Sonar Config -->
     <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
@@ -45,13 +45,10 @@
     <sonar.projectKey>uk.gov.companieshouse:chips-filing-mock</sonar.projectKey>
 
     <assertj-core.version>3.27.7</assertj-core.version>
-    <log4j-api.version>2.25.4</log4j-api.version>
-    <logback-core.version>1.5.28</logback-core.version>
-    <tomcat-embed-core.version>11.0.22</tomcat-embed-core.version>
-    <tomcat-embed-websocket.version>11.0.22</tomcat-embed-websocket.version>
+    <log4j-api.version>2.25.5</log4j-api.version>
+    <tomcat-embed-core.version>11.0.24</tomcat-embed-core.version>
+    <tomcat-embed-websocket.version>11.0.24</tomcat-embed-websocket.version>
     <jetty-server.version>12.1.7</jetty-server.version>
-    <jackson-core.version>2.21.1</jackson-core.version>
-    <jackson-annotations.version>2.21</jackson-annotations.version>
     <kotlin.version>2.2.21</kotlin.version>
     <plexus.version>4.0.3</plexus.version>
   </properties>
@@ -61,10 +58,10 @@
       <dependency>
         <groupId>io.opentelemetry.instrumentation</groupId>
         <artifactId>opentelemetry-instrumentation-bom</artifactId>
-        <version>${opentelemetry-instrumentation-bom.version}</version>
+        <version>${opentelemetry-version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
+     </dependency>
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -91,13 +88,6 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>${commons-lang3.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-core</artifactId>
-        <version>${logback-core.version}</version>
-        <scope>compile</scope>
       </dependency>
 
       <dependency>
@@ -218,16 +208,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.opentelemetry.instrumentation</groupId>
-      <artifactId>opentelemetry-spring-boot-starter</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.jetbrains.kotlin</groupId>
-          <artifactId>kotlin-stdlib-common</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
     </dependency>
@@ -241,43 +221,29 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
+      <artifactId>spring-boot-starter-webmvc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-restclient</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-opentelemetry</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.opentelemetry.instrumentation</groupId>
+        <artifactId>opentelemetry-logback-appender-1.0</artifactId>
+        <version>${opentelemetry-version}-alpha</version>
     </dependency>
     <dependency>
       <groupId>net.minidev</groupId>
       <artifactId>json-smart</artifactId>
-      <version>${json-smart.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
-      <version>${spring-boot-starter.version}</version>
       <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-logging</artifactId>
-      <version>${spring-boot-starter.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-classic</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-to-slf4j</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>2.0.7</version>
     </dependency>
 
     <dependency>
@@ -313,6 +279,12 @@
       <groupId>uk.gov.companieshouse</groupId>
       <artifactId>structured-logging</artifactId>
       <version>${structured-logging.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -330,12 +302,10 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>${jackson-core.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>${jackson-annotations.version}</version>
     </dependency>
 
     <dependency>
@@ -343,7 +313,6 @@
       <artifactId>sonar-maven-plugin</artifactId>
       <version>${sonar-maven-plugin.version}</version>
     </dependency>
-
   </dependencies>
 
   <build>
