@@ -1,5 +1,5 @@
 CHIPS filing mock
-==========
+=================
 This service mocks the filing backend processing. 
 
 It consumes [FilingReceived](https://github.com/companieshouse/chs-kafka-schemas/blob/master/schemas/filing-received.avsc) objects from a Kafka topic and calls the [Kafka API](https://github.com/companieshouse/chs-kafka-api) to process the filing.
