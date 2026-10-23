@@ -13,7 +13,7 @@
   <parent>
     <groupId>uk.gov.companieshouse</groupId>
     <artifactId>companies-house-parent</artifactId>
-    <version>2.1.14</version>
+    <version>3.0.0</version>
     <relativePath/>
   </parent>
 
@@ -28,12 +28,10 @@
     <jib-maven-plugin.version>3.4.6</jib-maven-plugin.version>
     <opentelemetry-version>2.29.0</opentelemetry-version>
     <!-- CVE-2025-14813 -->
-    <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
+    <sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
 
     <!-- Sonar Config -->
     <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
-    <sonar.login></sonar.login>
-    <sonar.password></sonar.password>
     <sonar.projectName>chips-filing-mock</sonar.projectName>
     <sonar.projectKey>uk.gov.companieshouse:chips-filing-mock</sonar.projectKey>
 
@@ -41,7 +39,7 @@
     <kotlin.version>2.2.21</kotlin.version>
     <plexus.version>4.0.3</plexus.version>
 
-    <ch-boms.version>0.1.22</ch-boms.version>
+    <ch-boms.version>0.1.27</ch-boms.version>
     <tomcat-embed-override.version>11.0.25</tomcat-embed-override.version>
   </properties>
 
