@@ -25,16 +25,9 @@
     <avro.version>1.12.1</avro.version>
     <spring-boot-starter.version>4.1.1</spring-boot-starter.version>
 
+    <mockserver-client.version>5.15.0</mockserver-client.version>
     <jib-maven-plugin.version>3.4.6</jib-maven-plugin.version>
     <opentelemetry-version>2.29.0</opentelemetry-version>
-    <!-- CVE-2025-14813 -->
-    <sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
-
-    <!-- Sonar Config -->
-    <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
-    <sonar.projectName>chips-filing-mock</sonar.projectName>
-    <sonar.projectKey>uk.gov.companieshouse:chips-filing-mock</sonar.projectKey>
-
     <jetty-server.version>12.1.7</jetty-server.version>
     <kotlin.version>2.2.21</kotlin.version>
     <plexus.version>4.0.3</plexus.version>
@@ -211,6 +204,12 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- testcontainers needs commons-lang3 3.18+, newer than the CH BOM-managed version -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.20.0</version>
+    </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
@@ -226,16 +225,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-webmvc</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.tomcat</groupId>
-          <artifactId>tomcat-embed-core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.tomcat</groupId>
-          <artifactId>tomcat-embed-websocket</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -261,6 +250,28 @@
     </dependency>
 
     <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers-kafka</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers-mockserver</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mock-server</groupId>
+      <artifactId>mockserver-client-java</artifactId>
+      <version>${mockserver-client.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
@@ -270,12 +281,6 @@
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
-      <exclusions>
-        <exclusion>
-            <groupId>org.lz4</groupId>
-            <artifactId>lz4-java</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -289,12 +294,6 @@
     <dependency>
       <groupId>uk.gov.companieshouse</groupId>
       <artifactId>structured-logging</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-simple</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -316,12 +315,6 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.sonarsource.scanner.maven</groupId>
-      <artifactId>sonar-maven-plugin</artifactId>
-      <version>${sonar-maven-plugin.version}</version>
     </dependency>
   </dependencies>
 
@@ -375,5 +368,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
