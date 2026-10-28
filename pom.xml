@@ -25,7 +25,6 @@
     <avro.version>1.12.1</avro.version>
     <spring-boot-starter.version>4.1.1</spring-boot-starter.version>
 
-    <mockserver-client.version>5.15.0</mockserver-client.version>
     <jib-maven-plugin.version>3.4.6</jib-maven-plugin.version>
     <opentelemetry-version>2.29.0</opentelemetry-version>
     <jetty-server.version>12.1.7</jetty-server.version>
@@ -262,12 +261,6 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers-mockserver</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mock-server</groupId>
-      <artifactId>mockserver-client-java</artifactId>
-      <version>${mockserver-client.version}</version>
       <scope>test</scope>
     </dependency>
 

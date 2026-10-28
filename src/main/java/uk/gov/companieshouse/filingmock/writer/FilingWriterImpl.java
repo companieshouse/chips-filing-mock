@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -19,12 +21,15 @@ public class FilingWriterImpl implements FilingWriter {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.APPLICATION_NAME);
     private final RestTemplate rest;
-    @Value("${kafka.api.url}")
-    String kafkaApiUrl;
 
-    @Autowired
-    public FilingWriterImpl(RestTemplate rest) {
+    private final String chsKafkaApiUrl;
+    private final String chsKafkaApiKey;
+
+    public FilingWriterImpl(RestTemplate rest, @Value("${kafka.api.url}") String chsKafkaApiUrl, @Value("${kafka.api.key}")
+    String chsKafkaApiKey) {
         this.rest = rest;
+        this.chsKafkaApiUrl = chsKafkaApiUrl;
+        this.chsKafkaApiKey = chsKafkaApiKey;
     }
 
     @Override
@@ -33,8 +38,12 @@ public class FilingWriterImpl implements FilingWriter {
             Map<String, Object> logData = getLoggedData(filingProcessed);
             LOG.trace("Sending response to kafka api", logData);
 
-            ResponseEntity<Object> response = rest.postForEntity(kafkaApiUrl, filingProcessed,
-                    Object.class);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", chsKafkaApiKey);
+
+            HttpEntity<FilingProcessed> request = new HttpEntity<>(filingProcessed, headers);
+
+            ResponseEntity<Object> response = rest.postForEntity(chsKafkaApiUrl, request, Object.class);
             if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
                 throw new FilingWriterException(
                         "Invalid response from Kafka API: " + response.getStatusCode());
