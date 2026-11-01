@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.filingmock.writer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
@@ -11,6 +13,7 @@ import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpEntity;
@@ -25,7 +28,7 @@ import uk.gov.companieshouse.filingmock.model.FilingProcessed;
 class FilingWriterImplTest {
 
     private static final String KAFKA_API_URL = "http://kafka-api-url:1234";
-    private static final String KAFKA_API_KEY = "http://kafka-api-url:1234";
+    private static final String KAFKA_API_KEY = "test-api-key";
 
     private FilingWriterImpl writer;
 
@@ -52,6 +55,20 @@ class FilingWriterImplTest {
         assertTrue(writer.write(filingProcessed));
 
         verify(rest).postForEntity(eq(KAFKA_API_URL), any(), any());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void writeSendsAuthorizationHeaderAndBody() throws Exception {
+        when(rest.postForEntity(eq(KAFKA_API_URL), any(), any())).thenReturn(
+                new ResponseEntity<>(HttpStatus.CREATED));
+
+        writer.write(filingProcessed);
+
+        ArgumentCaptor<HttpEntity<FilingProcessed>> captor = ArgumentCaptor.forClass(HttpEntity.class);
+        verify(rest).postForEntity(eq(KAFKA_API_URL), captor.capture(), any());
+        assertEquals(KAFKA_API_KEY, captor.getValue().getHeaders().getFirst("Authorization"));
+        assertSame(filingProcessed, captor.getValue().getBody());
     }
 
     private @NonNull HttpEntity<FilingProcessed> getFilingProcessedHttpEntity() {
