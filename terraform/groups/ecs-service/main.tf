@@ -24,11 +24,7 @@ module "secrets" {
   name_prefix = "${local.service_name}-${var.environment}"
   environment = var.environment
   kms_key_id  = data.aws_kms_key.kms_key.id
-  secrets = (
-    local.secrets_required
-    ? nonsensitive(local.service_secrets)
-    : local.service_secrets
-  )
+  secrets = nonsensitive(local.service_secrets)
 }
 
 module "ecs-service" {
