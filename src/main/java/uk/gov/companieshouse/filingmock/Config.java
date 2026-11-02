@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.filingmock;
 
+import org.apache.avro.util.ClassSecurityValidator;
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,10 @@ import uk.gov.companieshouse.kafka.deserialization.DeserializerFactory;
 @Configuration
 @EnableScheduling
 public class Config {
+
+    public Config() {
+        ClassSecurityValidator.setGlobal((clazz -> true));
+    }
 
     @Bean
     DeserializerFactory deserializerFactory() {
