@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.filingmock.writer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
@@ -7,12 +9,15 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
@@ -23,8 +28,8 @@ import uk.gov.companieshouse.filingmock.model.FilingProcessed;
 class FilingWriterImplTest {
 
     private static final String KAFKA_API_URL = "http://kafka-api-url:1234";
+    private static final String KAFKA_API_KEY = "test-api-key";
 
-    @InjectMocks
     private FilingWriterImpl writer;
 
     @Mock
@@ -34,33 +39,62 @@ class FilingWriterImplTest {
 
     @BeforeEach
     void setup() {
-        writer.kafkaApiUrl = KAFKA_API_URL;
+        writer =  new FilingWriterImpl(rest, KAFKA_API_URL, KAFKA_API_KEY);
         filingProcessed = new FilingProcessed();
     }
 
     @Test
     void write() throws Exception {
         ResponseEntity<Object> response = new ResponseEntity<>(HttpStatus.CREATED);
-        when(rest.postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any())).thenReturn(
+
+        HttpEntity<FilingProcessed> request = getFilingProcessedHttpEntity();
+
+        when(rest.postForEntity(eq(KAFKA_API_URL), eq(request), any())).thenReturn(
                 response);
 
         assertTrue(writer.write(filingProcessed));
 
-        verify(rest).postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any());
+        verify(rest).postForEntity(eq(KAFKA_API_URL), any(), any());
     }
 
     @Test
-    void writeErrorResponse() throws Exception {
+    @SuppressWarnings("unchecked")
+    void writeSendsAuthorizationHeaderAndBody() throws Exception {
+        when(rest.postForEntity(eq(KAFKA_API_URL), any(), any())).thenReturn(
+                new ResponseEntity<>(HttpStatus.CREATED));
+
+        writer.write(filingProcessed);
+
+        ArgumentCaptor<HttpEntity<FilingProcessed>> captor = ArgumentCaptor.forClass(HttpEntity.class);
+        verify(rest).postForEntity(eq(KAFKA_API_URL), captor.capture(), any());
+        assertEquals(KAFKA_API_KEY, captor.getValue().getHeaders().getFirst("Authorization"));
+        assertSame(filingProcessed, captor.getValue().getBody());
+    }
+
+    private @NonNull HttpEntity<FilingProcessed> getFilingProcessedHttpEntity() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", KAFKA_API_KEY);
+        return new HttpEntity<>(filingProcessed, headers);
+    }
+
+    @Test
+    void writeErrorResponse() {
         ResponseEntity<Object> response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        when(rest.postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any())).thenReturn(
+
+        HttpEntity<FilingProcessed> request = getFilingProcessedHttpEntity();
+
+        when(rest.postForEntity(eq(KAFKA_API_URL), eq(request), any())).thenReturn(
                 response);
 
         assertThrows(FilingWriterException.class, () -> writer.write(filingProcessed));
     }
 
     @Test
-    void writeRestException() throws Exception {
-        when(rest.postForEntity(eq(KAFKA_API_URL), eq(filingProcessed), any())).thenThrow(
+    void writeRestException() {
+
+        HttpEntity<FilingProcessed> request = getFilingProcessedHttpEntity();
+
+        when(rest.postForEntity(eq(KAFKA_API_URL), eq(request), any())).thenThrow(
                 new RestClientException("exception"));
 
         assertThrows(FilingWriterException.class, () -> writer.write(filingProcessed));
