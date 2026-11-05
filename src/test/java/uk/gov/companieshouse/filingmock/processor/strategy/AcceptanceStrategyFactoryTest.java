@@ -28,6 +28,16 @@ class AcceptanceStrategyFactoryTest {
     }
 
     @Test
+    void getDissolutionStrategy() {
+        for (String kind : new String[]{"dissolution#ds01", "dissolution#llds01"}) {
+            Transaction submission = new Transaction();
+            submission.setKind(kind);
+            assertInstanceOf(DissolutionAcceptanceStrategy.class,
+                    AcceptanceStrategyFactory.getStrategy(submission));
+        }
+    }
+
+    @Test
     void getDefaultStrategyUnknownType() throws Exception {
         Transaction submission = new Transaction();
         submission.setKind("unknown-transaction-type");

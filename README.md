@@ -8,6 +8,7 @@ The filing will automatically be accepted unless it matches one of the pre-deter
 - A change of address transaction using one of the Companies House's post codes (CF14 3UZ, BT28BG, SW1H9EX, EH39FF).
 - A change of registered email address transaction where the email address belongs to Companies House (@companieshouse.gov.uk).
 - An insolvency transaction (the logic is looking for a submission kind containing the string 'insolvency') where the first practitioner associated with the insolvency case is using one of the Companies House's post codes (CF14 3UZ, BT28BG, SW1H9EX, EH39FF).
+- A dissolution transaction (the logic is looking for a submission kind containing the string 'dissolution') where any officer's `on_behalf_name` contains the text "reject" (case-insensitive).
 
 As new filings are exposed to external software vendors more reject criteria should be added to this list and the relevant public documentation. 
 
