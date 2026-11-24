@@ -11,7 +11,6 @@ public class AcceptanceStrategyFactory {
     private static final AcceptanceStrategy ROA = new RoaAcceptanceStrategy();
     private static final AcceptanceStrategy REA = new ReaAcceptanceStrategy();
     private static final AcceptanceStrategy INSOLVENCY = new InsolvencyAcceptanceStrategy();
-    private static final AcceptanceStrategy DISSOLUTION = new DissolutionAcceptanceStrategy();
     private static final AcceptanceStrategy ALWAYS_ACCEPT = t -> new FilingStatus();
 
     private AcceptanceStrategyFactory() {
@@ -35,7 +34,6 @@ public class AcceptanceStrategyFactory {
             case "registered-office-address" -> ROA;
             case "registered-email-address" -> REA;
             case String s when s.startsWith("insolvency") -> INSOLVENCY;
-            case String s when s.startsWith("dissolution") -> DISSOLUTION;
             case null, default -> ALWAYS_ACCEPT;
         };
 
